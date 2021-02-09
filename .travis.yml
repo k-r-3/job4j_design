@@ -14,3 +14,7 @@ notifications:
       - rke19922802@gmail.com
     on_success: never # default: change
     on_failure: always # default: always
+
+env:
+  global:
+    -CODECOV_TOKEN="c70d7e95-4cb3-4684-a867-d316f420c7ab"
