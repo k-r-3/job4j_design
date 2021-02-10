@@ -13,10 +13,7 @@ public class EvenNumbersIterator implements Iterator<Integer> {
 
     @Override
     public boolean hasNext() {
-        if (position(marker) != -1) {
-            return true;
-        }
-        return false;
+        return position(marker) != -1;
     }
 
     @Override
