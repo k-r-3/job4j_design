@@ -25,8 +25,7 @@ public class FlatMap<T> implements Iterator<T> {
         if (!cursor.hasNext()) {
             cursor = data.next();
         }
-        return Stream.of(cursor).flatMap(e -> List.of(e.next())
-                .stream())
+        return Stream.of(data).map(e -> cursor.next())
                 .findFirst()
                 .get();
     }
