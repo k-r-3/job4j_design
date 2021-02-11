@@ -13,7 +13,12 @@ public class EvenNumbersIterator implements Iterator<Integer> {
 
     @Override
     public boolean hasNext() {
-        return position(marker) != -1;
+        var result = position(marker);
+        if (result != -1) {
+            marker = result;
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -21,19 +26,17 @@ public class EvenNumbersIterator implements Iterator<Integer> {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-        Integer result = array[position(marker)];
+        Integer result = array[marker];
         marker = position(marker) + 1;
         return result;
     }
 
     private int position(int iterator) {
-        int result = -1;
         for (int i = iterator; i < array.length; i++) {
             if (array[i] % 2 == 0) {
-                result =  i;
-                break;
+                return i;
             }
         }
-        return result;
+        return -1;
     }
 }
