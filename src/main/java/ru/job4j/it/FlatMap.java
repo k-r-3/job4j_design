@@ -14,7 +14,9 @@ public class FlatMap<T> implements Iterator<T> {
 
     @Override
     public boolean hasNext() {
-
+        while (data.hasNext() && !cursor.hasNext()) {
+            cursor = data.next();
+        }
         return data.hasNext() || cursor.hasNext();
     }
 
@@ -22,9 +24,6 @@ public class FlatMap<T> implements Iterator<T> {
     public T next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
-        }
-        if (!cursor.hasNext()) {
-            cursor = data.next();
         }
         return Stream.of(data).map(e -> cursor.next())
                 .findFirst()
