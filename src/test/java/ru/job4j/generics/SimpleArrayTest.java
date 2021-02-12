@@ -43,6 +43,14 @@ public class SimpleArrayTest {
         assertThat(array.get(1), is(0));
     }
 
+
+
+    @Test
+    public void whenAddNull() {
+        SimpleArray<Integer> array = new SimpleArray<>(4);
+        assertThat(array.iterator().hasNext(), is(true));
+    }
+
     @Test(expected = IndexOutOfBoundsException.class)
     public void whenExceptionSet() {
         SimpleArray<Integer> array = new SimpleArray<>(4);
