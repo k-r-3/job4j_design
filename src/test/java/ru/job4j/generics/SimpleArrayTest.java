@@ -3,7 +3,6 @@ package ru.job4j.generics;
 import org.junit.Test;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.is;
@@ -42,8 +41,6 @@ public class SimpleArrayTest {
         array.set(1, 0);
         assertThat(array.get(1), is(0));
     }
-
-
 
     @Test
     public void whenAddNull() {
