@@ -6,18 +6,13 @@ import java.util.Objects;
 public class SimpleArray<T> implements Iterable<T> {
     private T[] array;
     private int cursor = 0;
-    private int marker = 0;
 
     public SimpleArray(int size) {
         array = (T[]) new Object[size];
     }
 
     public void add(T model) {
-        if (iterator().hasNext()) {
-            array[cursor++] = model;
-        } else {
-            throw new IndexOutOfBoundsException();
-        }
+        array[cursor++] = model;
     }
 
     public T set(int index, T model) {
@@ -43,6 +38,7 @@ public class SimpleArray<T> implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
+            private int marker = 0;
             @Override
             public boolean hasNext() {
                 return cursor < array.length;
