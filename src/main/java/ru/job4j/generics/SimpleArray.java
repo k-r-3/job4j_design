@@ -1,6 +1,7 @@
 package ru.job4j.generics;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class SimpleArray<T> implements Iterable<T> {
@@ -41,15 +42,15 @@ public class SimpleArray<T> implements Iterable<T> {
             private int marker = 0;
             @Override
             public boolean hasNext() {
-                return marker < cursor;
+                return marker != cursor;
             }
 
             @Override
             public T next() {
-                if (marker < array.length) {
-                    return array[marker++];
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
                 }
-                return null;
+                return array[marker++];
             }
         };
     }
