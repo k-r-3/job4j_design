@@ -1,9 +1,6 @@
 package ru.job4j.collection;
 
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 public class SimpleArray<T> implements Iterable<T> {
     private Object[] container = {};
@@ -24,7 +21,7 @@ public class SimpleArray<T> implements Iterable<T> {
     }
 
     private void grow() {
-        container = (T[]) new Object[size + 10];
+        container = Arrays.copyOf(container, container.length * 2);
     }
 
     @Override
