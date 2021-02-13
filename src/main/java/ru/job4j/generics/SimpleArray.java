@@ -13,7 +13,6 @@ public class SimpleArray<T> implements Iterable<T> {
 
     public void add(T model) {
         array[cursor++] = model;
-        iterator().next();
     }
 
     public T set(int index, T model) {
@@ -42,7 +41,7 @@ public class SimpleArray<T> implements Iterable<T> {
             private int marker = 0;
             @Override
             public boolean hasNext() {
-                return marker < array.length;
+                return marker < cursor;
             }
 
             @Override

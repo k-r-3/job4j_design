@@ -45,7 +45,7 @@ public class SimpleArrayTest {
     @Test
     public void whenAddNull() {
         SimpleArray<Integer> array = new SimpleArray<>(4);
-        assertThat(array.iterator().hasNext(), is(true));
+        assertThat(array.iterator().hasNext(), is(false));
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
