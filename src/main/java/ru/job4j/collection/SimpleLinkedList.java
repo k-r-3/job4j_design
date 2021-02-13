@@ -9,7 +9,6 @@ public class SimpleLinkedList<T> implements Iterable<T> {
     private int modCount;
     private int size;
     private Node<T> head;
-    private Node<T> tail;
 
     private static class Node<T> {
         private T item;
@@ -23,12 +22,15 @@ public class SimpleLinkedList<T> implements Iterable<T> {
     public void add(T element) {
         if (head == null) {
             head = new Node<T>(element);
+            size++;
+            modCount++;
+            return;
         }
-            tail = head;
-            while (tail.next != null) {
-                tail = tail.next;
+        Node<T> currentNode = head;
+            while (currentNode.next != null) {
+                currentNode = currentNode.next;
             }
-            tail.next = new Node<T>(element);
+            currentNode.next = new Node<T>(element);
         size++;
         modCount++;
     }
@@ -37,7 +39,7 @@ public class SimpleLinkedList<T> implements Iterable<T> {
         Objects.checkIndex(index, size);
         Node<T> result = head;
         Node<T> currentResult;
-        for (int i = 0; i <= index; i++) {
+        for (int i = 0; i < index; i++) {
             currentResult = result.next;
             result = currentResult;
         }
@@ -60,10 +62,13 @@ public class SimpleLinkedList<T> implements Iterable<T> {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                if (cursor >= size) {
+                if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return get(cursor++);
+                Node<T> nextNode = head;
+                nextNode = nextNode.next;
+                cursor++;
+                return nextNode.item;
             }
         };
     }
