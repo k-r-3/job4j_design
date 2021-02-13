@@ -21,7 +21,7 @@ public class SimpleArray<T> implements Iterable<T> {
     }
 
     private void grow() {
-        container = Arrays.copyOf(container, container.length * 2);
+        container = Arrays.copyOf(container, (container.length + 1) * 2);
     }
 
     @Override
