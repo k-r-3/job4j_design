@@ -49,6 +49,7 @@ public class SimpleLinkedList<T> implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
+            private Node<T> current = head;
             private int expectedModCount = modCount;
             private int cursor;
 
@@ -65,10 +66,10 @@ public class SimpleLinkedList<T> implements Iterable<T> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                Node<T> nextNode = head;
-                nextNode = nextNode.next;
+                T value = current.item;
+                current = current.next;
                 cursor++;
-                return nextNode.item;
+                return value;
             }
         };
     }
