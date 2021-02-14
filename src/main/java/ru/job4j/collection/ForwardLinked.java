@@ -5,18 +5,20 @@ import java.util.NoSuchElementException;
 
 public class ForwardLinked<T> implements Iterable<T> {
     private Node<T> head;
+    private Node<T> tail;
 
     public void add(T value) {
-        Node<T> node = new Node<T>(value, null);
+        Node<T> node = new Node<T>(null, value, null);
         if (head == null) {
             head = node;
+            tail = node;
+            head.next = tail;
+            tail.prev = head;
             return;
         }
-        Node<T> tail = head;
-        while (tail.next != null) {
-            tail = tail.next;
-        }
-        tail.next = node;
+        tail = new Node<T>(tail.prev, tail.prev.value, node);
+        node = new Node<T>(tail, value, null);
+        tail = node;
     }
 
     public T deleteFirst() {
@@ -29,18 +31,15 @@ public class ForwardLinked<T> implements Iterable<T> {
     }
 
     public T deleteLast() {
-        Node<T> current = head;
-        T value = head.value;
-        if (current.next == null) {
+        if (tail == null || tail.prev == null) {
+            T result = head.value;
             head = null;
-        } else {
-            while (current.next.next != null) {
-                current = current.next;
-            }
-            value = current.next.value;
-            current.next = null;
+            return result;
         }
-        return value;
+        T result = tail.value;
+        tail = tail.prev;
+        tail.prev = tail.prev.prev;
+        return result;
     }
 
     public void revert() {
@@ -81,10 +80,13 @@ public class ForwardLinked<T> implements Iterable<T> {
     private static class Node<T> {
         private T value;
         private Node<T> next;
+        private Node<T> prev;
 
-        public Node(T value, Node<T> next) {
+        public Node(Node<T> prev, T value, Node<T> next) {
+            this.prev = prev;
             this.value = value;
             this.next = next;
+
         }
     }
 }
