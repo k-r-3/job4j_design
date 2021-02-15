@@ -31,6 +31,14 @@ public class SimpleSetTest {
     }
 
     @Test
+    public void whenAddBothThenFalse() {
+        SimpleSet<Integer> set = new SimpleSet<>();
+        set.add(1);
+        set.add(2);
+        assertThat(set.add(2), is(false));
+    }
+
+    @Test
     public void whenAddNull() {
         SimpleSet<Integer> set = new SimpleSet<>();
         set.add(1);
@@ -39,5 +47,11 @@ public class SimpleSetTest {
         Iterator<Integer> it = set.iterator();
         assertThat(it.next(), is(1));
         assertThat(it.hasNext(), is(false));
+    }
+
+    @Test
+    public void whenAddNullThenFalse() {
+        SimpleSet<Integer> set = new SimpleSet<>();
+        assertThat(set.add(null), is(false));
     }
 }
