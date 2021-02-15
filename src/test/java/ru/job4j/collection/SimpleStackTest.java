@@ -17,7 +17,7 @@ public class SimpleStackTest {
         assertThat(stack.pop(), is(1));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = NoSuchElementException.class)
     public void whenPollEmpty() {
         SimpleStack<Integer> stack = new SimpleStack<>();
         assertThat(stack.pop(), is(1));
