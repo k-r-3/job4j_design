@@ -57,7 +57,7 @@ public class ListUtilsTest {
         List<Integer> input = new ArrayList<>(Arrays.asList(2, 1, 4, 8, 3));
         List<Integer> forCompare = new ArrayList<>(Arrays.asList(2, 4, 8));
         input = ListUtils.removeAll(input, forCompare);
-        assertThat(input, is(Arrays.asList(1,3)));
+        assertThat(input, is(Arrays.asList(1, 3)));
     }
 
 }
