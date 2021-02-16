@@ -53,7 +53,7 @@ public class ListUtilsTest {
     }
 
     @Test
-    public void whenReplaceAll() {
+    public void whenRemoveAll() {
         List<Integer> input = new ArrayList<>(Arrays.asList(2, 1, 4, 8, 3));
         List<Integer> forCompare = new ArrayList<>(Arrays.asList(2, 4, 8));
         input = ListUtils.removeAll(input, forCompare);

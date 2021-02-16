@@ -35,11 +35,11 @@ public class ListUtils {
         List<T> result = new ArrayList<>();
         while (i.hasNext()) {
             T value = i.next();
-            if (!filter.test(value)) {
-                result.add(value);
+            if (filter.test(value)) {
+                i.remove();
             }
         }
-        return result;
+        return list;
     }
 
     public static <T> List<T> replaceIf(List<T> list, Predicate<T> filter, T value) {
@@ -55,14 +55,13 @@ public class ListUtils {
 
     public static <T> List<T> removeAll(List<T> list, List<T> elements) {
         ListIterator<T> i = list.listIterator();
-        List<T> result = new ArrayList<>();
         while (i.hasNext()) {
             T value = i.next();
-            if (!elements.contains(value)) {
-                result.add(value);
+            if (elements.contains(value)) {
+                i.remove();
             }
         }
-        return result;
+        return list;
     }
 
 }
