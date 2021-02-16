@@ -3,6 +3,7 @@ package ru.job4j.collection;
 import org.junit.Test;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.is;
@@ -46,12 +47,6 @@ public class SimpleSetTest {
         set.add(null);
         Iterator<Integer> it = set.iterator();
         assertThat(it.next(), is(1));
-        assertThat(it.hasNext(), is(false));
-    }
-
-    @Test
-    public void whenAddNullThenFalse() {
-        SimpleSet<Integer> set = new SimpleSet<>();
-        assertThat(set.add(null), is(false));
+        assertThat(Objects.isNull(it.next()), is(true));
     }
 }
