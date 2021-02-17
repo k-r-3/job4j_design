@@ -32,6 +32,16 @@ public class SimpleSetTest {
     }
 
     @Test
+    public void whenAddBothNulls() {
+        SimpleSet<String> set = new SimpleSet<>();
+        set.add(null);
+        set.add(null);
+        Iterator<String> it = set.iterator();
+        it.next();
+        assertThat(it.hasNext(), is(false));
+    }
+
+    @Test
     public void whenAddBothThenFalse() {
         SimpleSet<Integer> set = new SimpleSet<>();
         set.add(1);
