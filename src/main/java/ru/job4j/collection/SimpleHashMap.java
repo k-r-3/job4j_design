@@ -6,7 +6,6 @@ public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
     private Node<K, V>[] table;
     private Node<K, V> head;
     private Node<K, V> tail;
-    private Node<K, V> next = null;
     private int size = 16;
     private int amount = 0;
     private int modCount = 0;
@@ -23,18 +22,17 @@ public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
             return false;
         }
         int index = index(key);
-        Node<K, V> newNode = new Node(key, value, next);
+        Node<K, V> newNode = new Node(key, value, tail);
         if (head == null) {
             head = newNode;
-            next = newNode;
-            table[index] = next;
+            tail = newNode;
+            table[index] = head;
             amount++;
             return true;
         }
-        next = new Node(next.key, next.value, tail);
-        tail = newNode;
-        next = tail;
-        table[index] = next;
+        tail.next = newNode;
+        tail = tail.next;
+        table[index] = tail;
         amount++;
         modCount++;
         return true;
@@ -64,7 +62,7 @@ public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
 
     private int hash(K key) {
         int h = key.hashCode();
-        return key.hashCode() == 0 ? 0 : h ^ (h >>> 16);
+        return h == 0 ? 0 : h ^ (h >>> 16);
     }
 
     private int index(K key) {
@@ -93,7 +91,7 @@ public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
     @Override
     public Iterator<Node<K, V>> iterator() {
         return new Iterator<>() {
-            private Node<K, V> current = next;
+            private Node<K, V> current = head;
             private int expectedModCount = modCount;
             private int cursor;
 

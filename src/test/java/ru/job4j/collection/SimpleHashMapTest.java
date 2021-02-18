@@ -17,7 +17,6 @@ public class SimpleHashMapTest {
         assertThat(map.insert(key, value), is(true));
     }
 
-
     @Test
     public void whenAddBothKeys() {
         SimpleHashMap<String, String> map = new SimpleHashMap<>();
@@ -38,8 +37,8 @@ public class SimpleHashMapTest {
         String value2 = "example value2";
         map.insert(key, value);
         map.insert(key2, value2);
-        assertThat(map.get(key),is(value));
-        assertThat(map.get(key2),is(value2));
+        assertThat(map.get(key), is(value));
+        assertThat(map.get(key2), is(value2));
     }
 
     @Test
@@ -49,7 +48,7 @@ public class SimpleHashMapTest {
         String key2 = "example key2";
         String value = "example value";
         map.insert(key, value);
-        assertThat(Objects.isNull(map.get(key2)),is(true));
+        assertThat(Objects.isNull(map.get(key2)), is(true));
     }
 
     @Test
@@ -59,11 +58,23 @@ public class SimpleHashMapTest {
         String value = "example value";
         map.insert(key, value);
         Iterator<SimpleHashMap.Node<String, String>> iterator = map.iterator();
-        assertThat(iterator.hasNext(), is (true));
+        assertThat(iterator.hasNext(), is(true));
     }
 
     @Test
-    public void whenNext() {
+    public void whenNextOnce() {
+        SimpleHashMap<String, String> map = new SimpleHashMap<>();
+        String key = "example key";
+        String value = "example value";
+        map.insert(key, value);
+        Iterator<SimpleHashMap.Node<String, String>> iterator = map.iterator();
+        String expected = "{example key = example value}";
+        String actual = iterator.next().toString();
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void whenMultiNext() {
         SimpleHashMap<String, String> map = new SimpleHashMap<>();
         String key = "example key";
         String key2 = "example key2";
@@ -75,9 +86,9 @@ public class SimpleHashMapTest {
         String expected = "{example key = example value}";
         String expected2 = "{example key2 = example value2}";
         String actual = iterator.next().toString();
-        assertThat(actual, is (expected2));
+        assertThat(actual, is(expected));
         String actual2 = iterator.next().toString();
-        assertThat(actual2, is (expected));
+        assertThat(actual2, is(expected2));
     }
 
     @Test
@@ -88,9 +99,8 @@ public class SimpleHashMapTest {
         map.insert(key, value);
         Iterator<SimpleHashMap.Node<String, String>> iterator = map.iterator();
         iterator.next();
-        assertThat(iterator.hasNext(), is (false));
+        assertThat(iterator.hasNext(), is(false));
     }
-
 
     @Test
     public void whenDelete() {
@@ -104,7 +114,7 @@ public class SimpleHashMapTest {
         map.delete(key2);
         Iterator<SimpleHashMap.Node<String, String>> iterator = map.iterator();
         iterator.next();
-        assertThat(iterator.hasNext(), is (false));
+        assertThat(iterator.hasNext(), is(false));
     }
 
     @Test (expected = ConcurrentModificationException.class)
@@ -129,4 +139,5 @@ public class SimpleHashMapTest {
         iterator.next();
         iterator.next();
     }
+
 }
