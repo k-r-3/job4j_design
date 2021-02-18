@@ -33,7 +33,7 @@ class Tree<E> implements SimpleTree<E> {
 
     public boolean isBinary() {
         Optional<Node<E>> result;
-        result = findByPredicate(n -> n.getChildren().size() >= 2);
+        result = findByPredicate(n -> n.getChildren().size() > 2);
         return result.isEmpty();
     }
 
