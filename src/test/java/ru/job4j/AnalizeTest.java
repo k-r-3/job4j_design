@@ -96,16 +96,18 @@ public class AnalizeTest {
         List<User> previous = new ArrayList<>(Arrays.asList(
                 new User(1, "Ivan"),
                 new User(2, "Petr"),
+                new User(4, "Per"),
                 new User(3, "Boris")));
         List<User> current = new ArrayList<>(previous);
         current.set(0, new User(1, "Dmitry"));
-        current.add(new User(4, "Nikolay"));
+        current.add(new User(6, "Nikolay"));
+        current.remove(1);
         current.add(new User(5, "Pavel"));
-        current.remove(2);
-        current.set(1, new User(2, "Dmiry"));
+        current.remove(1);
+//        current.set(1, new User(2, "Dmiry"));
         Info info = analize.diff(previous, current);
         String actual = info.toString();
-        String expected = "added=2, changed=2, deleted=1";
+        String expected = "added=2, changed=1, deleted=2";
         assertEquals(expected, actual);
     }
 }

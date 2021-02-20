@@ -5,28 +5,30 @@ import java.util.*;
 public class Analize {
 
     public Info diff(List<User> previous, List<User> current) {
-        User verifer;
-        User verifiable;
+        Map<Integer, String> map = new HashMap<>();
+        User user;
         int changed = 0;
-        int shift = 0;
-        int deleted = 0;
+        int added = 0;
         for (int i = 0; i < previous.size(); i++) {
-            if (shift == current.size()) {
-                deleted += (previous.size()) - i;
-                break;
-            }
-            verifer = previous.get(i);
-            verifiable = current.get(shift);
-            if (verifer.id == verifiable.id) {
-                shift++;
-                if (!verifer.name.equals(verifiable.name)) {
-                    changed++;
-                }
-            } else {
-                deleted++;
+            user = previous.get(i);
+            if (!Objects.isNull(user)) {
+                map.put(user.id, user.name);
             }
         }
-        int added = (current.size() + deleted) - previous.size();
+        for (int i = 0; i < current.size(); i++) {
+            user = current.get(i);
+            if (!Objects.isNull(user)) {
+                String name = map.get(user.id);
+                if (name != null) {
+                    if (!name.equals(user.name)) {
+                        changed++;
+                    }
+                } else {
+                    added++;
+                }
+            }
+        }
+        int deleted =  map.size() - current.size() + added;
         return new Info.Builder()
                 .setAdded(added)
                 .setChanged(changed)
