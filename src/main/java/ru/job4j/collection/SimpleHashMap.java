@@ -3,20 +3,28 @@ package ru.job4j.collection;
 import java.util.*;
 
 public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
+    private static final float LOAD_FACTOR = 0.75f;
     private Node<K, V>[] table;
     private Node<K, V> head;
     private Node<K, V> tail;
-    private int size = 16;
+    private int capacity = 16;
+    private int threshold = (int) (100 * (
+            capacity / (100 / LOAD_FACTOR)
+    ));
     private int amount = 0;
     private int modCount = 0;
 
     public SimpleHashMap() {
-        table = new Node[size];
+        table = new Node[capacity];
+    }
+
+    public int size() {
+        return table.length;
     }
 
     public boolean insert(K key, V value) {
-        if (amount == size) {
-            grow();
+        if (amount == threshold) {
+            resize();
         }
         if (get(key) != null) {
             return false;
@@ -41,8 +49,8 @@ public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
     public V get(K key) {
         V value = null;
         int index = index(key);
-        Objects.checkIndex(index, size);
-        if (table[index] != null) {
+        Objects.checkIndex(index, capacity);
+        if (check(key, index)) {
             value = table[index].value;
         }
         return value;
@@ -50,14 +58,40 @@ public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
 
     public boolean delete(K key) {
         int index = index(key);
-        table[index] = null;
-        amount--;
-        modCount++;
-        return true;
+        if (check(key, index)) {
+            table[index] = null;
+            amount--;
+            modCount++;
+            return true;
+        }
+        return false;
     }
 
-    private void grow() {
-        table = Arrays.copyOf(table, (size + 1) * 2);
+    private boolean check(K key, int index) {
+        return (table[index] != null
+                && (table[index].key).equals(key));
+    }
+
+    private void resize() {
+        SimpleHashMap newMap = new SimpleHashMap();
+        Node<K, V>[] oldTable = table;
+        int newCapacity = capacity << 1;
+        int newThreshold = (int) (100 * (newCapacity / (100 / LOAD_FACTOR)));
+        Node<K, V>[] newTable = new Node[newCapacity];
+        newMap.table = newTable;
+        newMap.capacity = newCapacity;
+        newMap.threshold = newThreshold;
+        Iterator<Node<K, V>> rIterator = iterator();
+        while (rIterator.hasNext()) {
+            Node<K, V> newNode = rIterator.next();
+            K key = newNode.key;
+            V value = newNode.value;
+            newMap.insert(key, value);
+        }
+        threshold = newThreshold;
+        capacity = newCapacity;
+        table = newMap.table;
+        newMap.table = null;
     }
 
     private int hash(K key) {
@@ -66,7 +100,7 @@ public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
     }
 
     private int index(K key) {
-        return (size - 1) & hash(key);
+        return (capacity - 1) & hash(key);
     }
 
     static class Node<K, V> {
