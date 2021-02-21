@@ -5,22 +5,22 @@ import java.util.*;
 public class Analize {
 
     public Info diff(List<User> previous, List<User> current) {
-        Map<Integer, String> map = new HashMap<>();
+        Map<Integer, User> map = new HashMap<>();
         User user;
         int changed = 0;
         int added = 0;
         for (int i = 0; i < previous.size(); i++) {
             user = previous.get(i);
             if (!Objects.isNull(user)) {
-                map.put(user.id, user.name);
+                map.put(user.id, user);
             }
         }
         for (int i = 0; i < current.size(); i++) {
             user = current.get(i);
             if (!Objects.isNull(user)) {
-                String name = map.get(user.id);
-                if (name != null) {
-                    if (!name.equals(user.name)) {
+                User verifiable = map.get(user.id);
+                if (verifiable != null) {
+                    if (!verifiable.equals(user)) {
                         changed++;
                     }
                 } else {
@@ -43,6 +43,26 @@ public class Analize {
         public User(int id, String name) {
             this.id = id;
             this.name = name;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            User user = (User) o;
+            return id == user.id
+                    && Objects.equals(name, user.name);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = Integer.hashCode(id);
+            result = result * 31 + name.hashCode();
+            return result;
         }
     }
 
