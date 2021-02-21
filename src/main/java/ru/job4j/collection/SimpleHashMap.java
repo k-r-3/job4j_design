@@ -5,7 +5,6 @@ import java.util.*;
 public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
     private static final float LOAD_FACTOR = 0.75f;
     private Node<K, V>[] table;
-    private Node<K, V> head;
     private int capacity = 16;
     private int threshold = (int) (100 * (
             capacity / (100 / LOAD_FACTOR)
@@ -25,21 +24,15 @@ public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
         if (amount == threshold) {
             resize();
         }
-        if (get(key) != null) {
-            return false;
-        }
         int index = index(key);
-        Node<K, V> tail = head;
-        Node<K, V> newNode = new Node(key, value, tail);
-        if (head == null) {
-            head = newNode;
-            table[index] = head;
-            amount++;
-            return true;
+        Node<K, V> node = table[index];
+        if (node != null) {
+            if (node.key == key) {
+                return false;
+            }
         }
-        tail.next = newNode;
-        tail = tail.next;
-        table[index] = tail;
+        Node<K, V> newNode = new Node(key, value);
+        table[index] = newNode;
         amount++;
         modCount++;
         return true;
@@ -73,7 +66,6 @@ public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
 
     private void resize() {
         SimpleHashMap newMap = new SimpleHashMap();
-        Node<K, V>[] oldTable = table;
         int newCapacity = capacity << 1;
         int newThreshold = (int) (100 * (newCapacity / (100 / LOAD_FACTOR)));
         Node<K, V>[] newTable = new Node[newCapacity];
@@ -105,12 +97,10 @@ public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
     static class Node<K, V> {
         private K key;
         private V value;
-        private Node<K, V> next;
 
-        public Node(K key, V value, Node<K, V> next) {
+        public Node(K key, V value) {
             this.key = key;
             this.value = value;
-            this.next = next;
         }
 
         @Override
@@ -124,7 +114,6 @@ public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
     @Override
     public Iterator<Node<K, V>> iterator() {
         return new Iterator<>() {
-            private Node<K, V> current = head;
             private int expectedModCount = modCount;
             private int cursor;
 
@@ -133,22 +122,20 @@ public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                return cursor != amount;
+                while (table[cursor] == null && cursor != size() - 1) {
+                    cursor++;
+                }
+                return cursor != size() - 1;
             }
 
             @Override
             public Node<K, V> next() {
-                if (expectedModCount != modCount) {
-                    throw new ConcurrentModificationException();
-                }
-                if (cursor >= amount) {
+                if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                if (cursor != 0) {
-                    current = current.next;
-                }
+                Node<K, V> result = table[cursor];
                 cursor++;
-                return current;
+                return result;
             }
         };
     }
