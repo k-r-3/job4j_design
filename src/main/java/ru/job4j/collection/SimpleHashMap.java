@@ -6,7 +6,6 @@ public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
     private static final float LOAD_FACTOR = 0.75f;
     private Node<K, V>[] table;
     private Node<K, V> head;
-    private Node<K, V> tail;
     private int capacity = 16;
     private int threshold = (int) (100 * (
             capacity / (100 / LOAD_FACTOR)
@@ -30,10 +29,10 @@ public class SimpleHashMap<K, V> implements Iterable<SimpleHashMap.Node<K, V>> {
             return false;
         }
         int index = index(key);
+        Node<K, V> tail = head;
         Node<K, V> newNode = new Node(key, value, tail);
         if (head == null) {
             head = newNode;
-            tail = newNode;
             table[index] = head;
             amount++;
             return true;

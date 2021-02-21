@@ -150,5 +150,4 @@ public class SimpleHashMapTest {
         }
         assertEquals(32, map.size());
     }
-
 }
