@@ -25,7 +25,8 @@ public class SimpleHashMapTest {
         String key2 = "example key";
         String value2 = "example value2";
         map.insert(key, value);
-        assertThat(map.insert(key2, value), is(false));
+        map.insert(key2, value2);
+        assertThat(map.get("example key"), is("example value2"));
     }
 
     @Test
