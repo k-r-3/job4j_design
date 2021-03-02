@@ -27,7 +27,6 @@ public class Config {
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new IllegalArgumentException();
         }
-//        System.out.println(values.toString());
     }
 
     public String value(String key) {
@@ -48,7 +47,6 @@ public class Config {
     public static void main(String[] args) {
         System.out.println(new Config("keyWithoutValue.txt"));
         Config c = new Config("keyWithoutValue.txt");
-        System.out.println("///////////");
         c.load();
     }
 }
