@@ -31,6 +31,17 @@ public class ConfigTest {
         );
     }
 
+    @Test
+    public void whenLinesWithComment() {
+        String path = "./propertiesWithComment.txt";
+        Config config = new Config(path);
+        config.load();
+        assertThat(
+                Objects.isNull(config.value("hibernate.connection.username")),
+                is(true)
+        );
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void whenKeyWithoutValue() {
         String path = "./keyWithoutValue.txt";

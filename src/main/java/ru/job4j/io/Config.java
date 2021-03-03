@@ -3,9 +3,8 @@ package ru.job4j.io;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Config {
@@ -17,11 +16,13 @@ public class Config {
     }
 
     public void load() {
+        List<String> list = new ArrayList<String>();
         try (BufferedReader read = new BufferedReader(new FileReader(this.path))) {
+            Pattern pattern = Pattern.compile("(?!//.*|/\\*.*|.*\\*/).*=.*");
             values = read.lines()
-                    .filter(s -> s.matches(".*=.*"))
-                    .collect(Collectors
-                            .toMap(k -> k.split("=")[0], v -> v.split("=")[1]));
+                    .filter(f -> f.matches(String.valueOf(pattern)))
+                    .map(s -> s.split("="))
+                    .collect(Collectors.toMap(m -> m[0], m -> m[1]));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -45,8 +46,8 @@ public class Config {
     }
 
     public static void main(String[] args) {
-        System.out.println(new Config("keyWithoutValue.txt"));
-        Config c = new Config("keyWithoutValue.txt");
+        System.out.println(new Config("propertiesWithComment.txt"));
+        Config c = new Config("propertiesWithComment.txt");
         c.load();
     }
 }
