@@ -37,7 +37,7 @@ public class ConfigTest {
         Config config = new Config(path);
         config.load();
         assertThat(
-                Objects.isNull(config.value("hibernate.connection.username")),
+                Objects.isNull(config.value("hibernate.connection.driver_class")),
                 is(true)
         );
     }

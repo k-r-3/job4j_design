@@ -16,13 +16,13 @@ public class Config {
     }
 
     public void load() {
-        List<String> list = new ArrayList<String>();
         try (BufferedReader read = new BufferedReader(new FileReader(this.path))) {
-            Pattern pattern = Pattern.compile("(?!//.*|/\\*.*|.*\\*/).*=.*");
+            Pattern pattern = Pattern.compile("(?!#.*|!.*).*=.*");
             values = read.lines()
                     .filter(f -> f.matches(String.valueOf(pattern)))
                     .map(s -> s.split("="))
                     .collect(Collectors.toMap(m -> m[0], m -> m[1]));
+            System.out.println(values);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -46,8 +46,8 @@ public class Config {
     }
 
     public static void main(String[] args) {
-        System.out.println(new Config("propertiesWithComment.txt"));
         Config c = new Config("propertiesWithComment.txt");
+        System.out.println(c);
         c.load();
     }
 }
