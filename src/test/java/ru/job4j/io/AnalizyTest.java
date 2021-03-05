@@ -90,7 +90,7 @@ public class AnalizyTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assertThat(actual.get(0), is(""));
+        assertThat(actual.isEmpty(), is(true));
     }
 
 }
