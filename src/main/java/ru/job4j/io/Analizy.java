@@ -5,9 +5,9 @@ import java.util.*;
 
 public class Analizy {
     public void unavailable(String source, String target) {
-        Deque<String> diapason = new LinkedList<>();
         List<String> list = new ArrayList<>();
         String marker = "";
+        int count = 0;
         try (BufferedReader reader = new BufferedReader(
                 new FileReader(source))) {
             while (reader.ready()) {
@@ -15,12 +15,11 @@ public class Analizy {
                 if (marker.isEmpty() && line.startsWith("400")
                         || line.startsWith("500")) {
                     marker = line;
-                    diapason.offer(marker.split(" ")[1] + ";");
+                    list.add(marker.split(" ")[1] + ";");
                 } else if (!line.matches("(400.*)|(500.*)")
                         && !marker.equals("")) {
-                    diapason.offer(line.split(" ")[1]);
-                    list.add(diapason.peekFirst() + diapason.peekLast());
-                    diapason.clear();
+                    list.set(count, list.get(count) + line.split(" ")[1]);
+                    count++;
                     marker = "";
                 }
             }
