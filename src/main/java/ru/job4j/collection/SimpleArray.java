@@ -1,6 +1,9 @@
 package ru.job4j.collection;
 
+import ru.job4j.iterator.ListUtils;
+
 import java.util.*;
+import java.util.function.Predicate;
 
 public class SimpleArray<T> implements Iterable<T> {
     private Object[] container = {};

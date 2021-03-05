@@ -14,13 +14,13 @@ public class SearchTest {
     public void whenSearchJava() throws IOException {
         Path root = Paths.get(
                 "c:\\projects\\job4j_design\\src\\main\\java\\ru\\job4j\\collection\\");
-        assertEquals(Search.search(root, "java").size(), 10);
+        assertEquals(Search.search(root, ".*java").size(), 10);
     }
 
     @Test
-    public void whenSearchReadme() throws IOException{
+    public void whenSearchReadme() throws IOException {
         Path root = Paths.get("c:\\projects\\job4j_design\\");
-        assertEquals(Search.search(root, "md").size(), 1);
+        assertEquals(Search.search(root, ".*md").size(), 1);
     }
 
 }

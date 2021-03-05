@@ -2,6 +2,7 @@ package ru.job4j.collection;
 
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 public class SimpleSet<T> implements Iterable<T> {
     private SimpleArray<T> storage = new SimpleArray<>();
@@ -14,6 +15,10 @@ public class SimpleSet<T> implements Iterable<T> {
         storage.add(element);
         size++;
         return true;
+    }
+
+    public T get(int index) {
+        return storage.get(index);
     }
 
     private boolean checkSimilarity(T element) {
