@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,19 +16,18 @@ public class ArgZip {
     }
 
     public boolean valid() {
-        for (int i = 0; i < args.length; i++) {
-            if (i % 2 == 0) {
-                if (!args[i].matches("-\\w")) {
-                    System.out.println("wrong argument #" + i);
-                    return false;
+            for (int i = 3; i < args.length; i++) {
+                    if (!args[i].matches("-.*")) {
+                        System.out.println("wrong argument #" + i);
+                        return false;
+                    }
                 }
-            }
-        }
         return true;
     }
 
     public List<File> directory() throws IOException {
-        Path root = Paths.get(args[1]);
+        String rootArg = args[3].split("=")[1];
+        Path root = Paths.get(rootArg);
         return Search.search(root, ".*")
                 .stream()
                 .filter(e -> !e.toString().matches(exclude()))
@@ -38,15 +36,14 @@ public class ArgZip {
     }
 
     public String exclude() {
-        return ".*" + args[3].split("\\*.")[1];
+        String excArg = args[4].split("=")[1];
+            return ".*" + excArg;
     }
 
     public File output() {
-        Path out = Paths.get(args[5]);
+        Path out;
+        String outArg = args[5].split("=")[1];
+            out = Paths.get(outArg);
         return out.toFile();
-    }
-
-    public void getArgs() {
-        System.out.println(Arrays.toString(args));
     }
 }
