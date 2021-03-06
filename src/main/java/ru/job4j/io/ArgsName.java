@@ -22,7 +22,6 @@ public class ArgsName {
              }
              values.put(entry[0], entry[1]);
          }
-        System.out.println(values);
     }
 
     public static ArgsName of(String[] args) {
