@@ -8,7 +8,9 @@ import java.util.Scanner;
 public class DuplicatesFinder {
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Input path to checked directory");
+        System.out.println("Enter the path to the directory that be checked");
         Files.walkFileTree(Path.of(sc.nextLine()), new DuplicatesVisitor());
+        System.out.println("Duplicates : ");
+        System.out.println(DuplicatesVisitor.getDuplicateMap());
     }
 }
