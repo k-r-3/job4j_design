@@ -3,11 +3,14 @@ package ru.job4j.io;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashSet;
+import java.util.Set;
 
 public class EchoServer {
     public static void main(String[] args) throws IOException {
         try (ServerSocket server = new ServerSocket(9000)) {
             while (!server.isClosed()) {
+                Set<String> resp = new HashSet<>();
                 boolean check = true;
                 Socket socket = server.accept();
                 try (OutputStream out = socket.getOutputStream();
@@ -16,17 +19,22 @@ public class EchoServer {
                     String str;
                     while (!(str = in.readLine()).isEmpty()) {
                         System.out.println(str);
-                        if (str.matches(".*Bye.*")) {
-                            check = false;
-                        }
+                        resp.add(str);
                     }
-                    out.write("HTTP/1.1 200 OK\r\n".getBytes());
-                    if (!check) {
-                        socket.close();
-                        System.exit(0);
+                    if (resp.toString().matches(".*Hello\\s.*")) {
+                        out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
+                        out.write("Hello, dear friend.".getBytes());
+                    } else if ((resp.toString().matches(".*Exit\\s.*"))) {
+                        out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
+                        out.write("Bye!".getBytes());
+                        server.close();
+                    } else if ((resp.toString().matches("(?!.*Exit\\s.*|.*Hello\\s.*).*"))) {
+                        out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
+                        out.write("What?".getBytes());
                     }
                 }
             }
+            System.exit(-1);
         }
     }
 }
