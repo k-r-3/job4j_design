@@ -2,62 +2,66 @@ package ru.job4j.io;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ConsoleChat {
     private static final String OUT = "закончить";
     private static final String STOP = "стоп";
     private static final String CONTINUE = "продолжить";
+    private List<String> answers;
     private final String path;
-    private final String botAnswers;
 
     public ConsoleChat(String path, String botAnswers) {
         this.path = path;
-        this.botAnswers = botAnswers;
+        try (BufferedReader br = new BufferedReader(
+                new FileReader(botAnswers, Charset.forName("WINDOWS-1251")))) {
+            answers = br.lines().collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void run() {
         Scanner sc = new Scanner(System.in);
-        String question = "";
+        List<String> chat = new ArrayList<>();
         System.out.println("/////////Chat//////////");
+        String question = sc.nextLine();
+        do {
+            if (question.equals(STOP)) {
+                while (!question.equals(CONTINUE)) {
+                    chat.add(String.format("%s\n", question));
+                    System.out.println("--------");
+                    question = sc.nextLine();
+                    if (question.equals(OUT)) {
+                        chat.add(question);
+                        break;
+                    }
+                }
+            } else {
+                chat.add(String.format("%s\n", botReader(question)));
+                question = sc.nextLine();
+            }
+        } while (!question.equals(OUT));
+        chat.add(String.format("%s\n", question));
         try (BufferedWriter writer = new BufferedWriter(
                 new FileWriter(path, Charset.forName("WINDOWS-1251"), true))) {
-            do {
-                question = sc.nextLine();
-                if (question.equals(STOP)) {
-                    while (!question.equals(CONTINUE)) {
-                        writer.write(String.format("%s\n", question));
-                        System.out.println("--------");
-                        question = sc.nextLine();
-                        if (question.equals(OUT)) {
-                            writer.write(question);
-                            System.exit(0);
-                        }
-                    }
-                } else {
-                    writer.write(String.format("%s\n", botReader(question)));
-                }
-            } while (!question.equals(OUT));
+            for (String e : chat) {
+                writer.write(e);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private String botReader(String question) {
-        String answer = "";
-        try (BufferedReader br = new BufferedReader(
-                new FileReader(botAnswers, Charset.forName("WINDOWS-1251")))) {
-            Random rand = new Random();
-            int line = rand.nextInt(5) + 1;
-            answer = br.lines()
-                    .filter(s -> s.matches(String.valueOf(line) + ".*"))
-                    .findFirst()
-                    .get()
-                    .split("\\d")[1];
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Random rand = new Random();
+        int line = rand.nextInt(5) + 1;
+        String answer = answers.stream()
+                .filter(s -> s.matches(String.valueOf(line) + ".*"))
+                .findFirst()
+                .get()
+                .split("\\d")[1];
         System.out.println(answer);
         return String.format("%s\r\n-%s", question, answer);
     }
