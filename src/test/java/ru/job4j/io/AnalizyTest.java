@@ -31,7 +31,8 @@ public class AnalizyTest {
             writer.println("200 11:01:02");
             writer.println("200 11:02:02");
         }
-        analizy.unavailable(source.getAbsolutePath(), target.getAbsolutePath());
+        analizy.unavailable(source.getAbsolutePath());
+        analizy.writeLog(target.getAbsolutePath());
         try (BufferedReader reader = new BufferedReader(
                 new FileReader(target))) {
             actual = reader.lines()
@@ -56,7 +57,8 @@ public class AnalizyTest {
             writer.println("400 11:01:02");
             writer.println("200 11:02:02");
         }
-        analizy.unavailable(source.getAbsolutePath(), target.getAbsolutePath());
+        analizy.unavailable(source.getAbsolutePath());
+        analizy.writeLog(target.getAbsolutePath());
         try (BufferedReader reader = new BufferedReader(
                 new FileReader(target))) {
             actual = reader.lines()
@@ -82,7 +84,8 @@ public class AnalizyTest {
             writer.println("200 11:01:02");
             writer.println("200 11:02:02");
         }
-        analizy.unavailable(source.getAbsolutePath(), target.getAbsolutePath());
+        analizy.unavailable(source.getAbsolutePath());
+        analizy.writeLog(target.getAbsolutePath());
         try (BufferedReader reader = new BufferedReader(
                 new FileReader(target))) {
             actual = reader.lines()

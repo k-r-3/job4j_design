@@ -4,8 +4,9 @@ import java.io.*;
 import java.util.*;
 
 public class Analizy {
-    public void unavailable(String source, String target) {
-        List<String> list = new ArrayList<>();
+    private List<String> list = new ArrayList<>();
+
+    public void unavailable(String source) {
         String marker = "";
         int count = 0;
         try (BufferedReader reader = new BufferedReader(
@@ -26,6 +27,9 @@ public class Analizy {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void writeLog(String target) {
         try (PrintWriter writer = new PrintWriter(
                 new BufferedOutputStream(
                         new FileOutputStream(target)))) {
@@ -38,6 +42,7 @@ public class Analizy {
 
     public static void main(String[] args) {
         Analizy analizy = new Analizy();
-        analizy.unavailable("unavailable log.txt", "unavailableLog.csv");
+        analizy.unavailable("unavailable log.txt");
+        analizy.writeLog("unavailableLog.csv");
     }
 }
