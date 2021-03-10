@@ -6,8 +6,13 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class EchoServer {
-    public static void main(String[] args) throws IOException {
+    public static final Logger LOG = LoggerFactory.getLogger(EchoServer.class.getName());
+
+    public static void main(String[] args) {
         try (ServerSocket server = new ServerSocket(9000)) {
             while (!server.isClosed()) {
                 Set<String> resp = new HashSet<>();
@@ -34,7 +39,10 @@ public class EchoServer {
                     }
                 }
             }
-            System.exit(-1);
+        } catch (IOException e) {
+            LOG.error("Exception  in server block : ", e);
         }
+        System.exit(-1);
     }
 }
+
