@@ -1,6 +1,8 @@
 package ru.job4j.io;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -11,10 +13,15 @@ import static org.hamcrest.Matchers.is;
 
 public class ZipTest {
 
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+
     @Test
     public void whenZipInOtherDir() throws IOException {
+
         ArgZip argZip = new ArgZip(new String[]
-                {"java", "-jar", "pack.jar", "-d=c:/JavaProgects", "-e=class",
+                {"java", "-jar", "pack.jar", "-d="
+                        + System.getProperty("java.io.tmpdir"), "-e=class",
                         "-o=project.zip"});
         Zip zip = new Zip();
         zip.packFiles(argZip.directory(), argZip.output());
