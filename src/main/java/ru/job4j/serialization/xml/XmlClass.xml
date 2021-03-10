@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<MainClass tumbler="false" amount="123" name="MainClass">
+    <in somenumber="100"/>
+    <arrayes>
+        <array>First word</array>
+        <array>Second word</array>
+    </arrayes>
+</MainClass>
