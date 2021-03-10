@@ -3,8 +3,8 @@ package ru.job4j.io;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +15,7 @@ public class EchoServer {
     public static void main(String[] args) {
         try (ServerSocket server = new ServerSocket(9000)) {
             while (!server.isClosed()) {
-                Set<String> resp = new HashSet<>();
-                boolean check = true;
+                Queue<String> query = new ArrayDeque<>();
                 Socket socket = server.accept();
                 try (OutputStream out = socket.getOutputStream();
                      BufferedReader in = new BufferedReader(
@@ -24,18 +23,23 @@ public class EchoServer {
                     String str;
                     while (!(str = in.readLine()).isEmpty()) {
                         System.out.println(str);
-                        resp.add(str);
+                        if (query.isEmpty()) {
+                            query.offer(str);
+                        }
                     }
-                    if (resp.toString().matches(".*Hello\\s.*")) {
-                        out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
-                        out.write("Hello, dear friend.".getBytes());
-                    } else if ((resp.toString().matches(".*Exit\\s.*"))) {
-                        out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
-                        out.write("Bye!".getBytes());
+                    if (query.peek().matches(".*Hello\\s.*")) {
+                        out.write(new EchoServer()
+                                .resp("Hello, dear friend")
+                                .getBytes());
+                    } else if ((query.peek().matches(".*Exit\\s.*"))) {
+                        out.write(new EchoServer()
+                                .resp("Bye!")
+                                .getBytes());
                         server.close();
-                    } else if ((resp.toString().matches("(?!.*Exit\\s.*|.*Hello\\s.*).*"))) {
-                        out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
-                        out.write("What?".getBytes());
+                    } else if ((query.peek().matches("(?!.*Exit\\s.*|.*Hello\\s.*).*"))) {
+                        out.write(new EchoServer()
+                                .resp("What?")
+                                .getBytes());
                     }
                 }
             }
@@ -43,6 +47,11 @@ public class EchoServer {
             LOG.error("Exception  in server block : ", e);
         }
         System.exit(-1);
+    }
+
+    private String resp(String msg) {
+        return String.format("%s %s",
+                "HTTP/1.1 200 OK\r\n\r\n", msg);
     }
 }
 
