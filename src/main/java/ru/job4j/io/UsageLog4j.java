@@ -13,5 +13,17 @@ public class UsageLog4j {
         LOG.info("info message");
         LOG.warn("warn message");
         LOG.error("error message");
+        short age = 29;
+        byte fileSize = (byte) 25;
+        int distance = 384400;
+        char category = 'A';
+        float capacity = 25.3f;
+        double density = (double) distance / capacity;
+        long time = System.nanoTime();
+        boolean check = true;
+        LOG.debug("My age : {}, file folder size : {}, distance to the moon : {}, \n"
+                + " mail category : {}, capacity in cubic meters {}, density : {}, \n"
+                + " time of running JVM : {}, check result : {}",
+                age, fileSize, distance, category, capacity, density, time, check);
     }
 }
