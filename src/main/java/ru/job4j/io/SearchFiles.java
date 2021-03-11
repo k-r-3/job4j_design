@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +34,9 @@ public class SearchFiles implements FileVisitor<Path> {
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
             throws IOException {
-        List.of(file.toAbsolutePath()).stream()
-                .filter(pred)
-                .forEach(paths::add);
+        if (pred.test(file.toAbsolutePath())) {
+            paths.add(file);
+        }
         return CONTINUE;
     }
 
