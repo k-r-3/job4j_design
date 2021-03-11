@@ -1,5 +1,7 @@
 package ru.job4j.serialization.json;
 
+import org.json.JSONPropertyName;
+
 public class ProductFacts {
     private final String name;
 

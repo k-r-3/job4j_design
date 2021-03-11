@@ -1,9 +1,13 @@
 package ru.job4j.serialization.json;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Market {
     private final boolean isOpen;
@@ -19,6 +23,18 @@ public class Market {
         this.facts = facts;
         this.marketName = marketName;
         this.type = type;
+    }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public int getAmountWorkingDays() {
+        return amountWorkingDays;
+    }
+
+    public String getMarketName() {
+        return marketName;
     }
 
     @Override
@@ -51,5 +67,21 @@ public class Market {
                 + "}";
         final Market marketFromJson = gson.fromJson(modified, Market.class);
         System.out.println(marketFromJson);
+        final Market moreMarket = gson.fromJson(jsonString, Market.class);
+        System.out.println(moreMarket);
+
+        Market newMarket = new Market(false, 7,
+                new ProductFacts("Fish"), "Ocean", "Retail", "state company");
+        JSONObject jsonProduct = new JSONObject("{\"name\":\"Meat\"}");
+        List<String> types = new ArrayList<>(Arrays.asList("Retail", "state company"));
+        JSONArray jsonTypes = new JSONArray(types);
+        JSONObject newObject = new JSONObject();
+        newObject.put("market is open", newMarket.isOpen());
+        newObject.put("working days", newMarket.getAmountWorkingDays());
+        newObject.put("Product Facts", jsonProduct);
+        newObject.put("market name", newMarket.getMarketName());
+        newObject.put("type", jsonTypes);
+        System.out.println(newObject.toString());
+        System.out.println(new JSONObject(newMarket).toString());
     }
 }
