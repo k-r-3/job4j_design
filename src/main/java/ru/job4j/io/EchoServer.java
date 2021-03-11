@@ -20,27 +20,24 @@ public class EchoServer {
                 try (OutputStream out = socket.getOutputStream();
                      BufferedReader in = new BufferedReader(
                              new InputStreamReader(socket.getInputStream()))) {
-                    String str;
-                    while (!(str = in.readLine()).isEmpty()) {
+                    String str = in.readLine();
+                    String answer = "";
+                    while (str != null && !str.isEmpty()) {
                         System.out.println(str);
                         if (query.isEmpty()) {
                             query.offer(str);
                         }
                     }
                     if (query.peek().matches(".*Hello\\s.*")) {
-                        out.write(new EchoServer()
-                                .resp("Hello, dear friend")
-                                .getBytes());
+                        answer = "Hello, dear friend";
                     } else if ((query.peek().matches(".*Exit\\s.*"))) {
-                        out.write(new EchoServer()
-                                .resp("Bye!")
-                                .getBytes());
+                                answer = "Bye!";
                         server.close();
                     } else if ((query.peek().matches("(?!.*Exit\\s.*|.*Hello\\s.*).*"))) {
-                        out.write(new EchoServer()
-                                .resp("What?")
-                                .getBytes());
+                                answer = "What?";
                     }
+                    out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
+                    out.write(answer.getBytes());
                 }
             }
         } catch (IOException e) {
