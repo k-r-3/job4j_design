@@ -14,7 +14,7 @@ public class Analizy {
             while (reader.ready()) {
                 String line = reader.readLine();
                 if (marker.isEmpty() && line.startsWith("400")
-                        || line.startsWith("500")) {
+                        || marker.isEmpty() && line.startsWith("500")) {
                     marker = line;
                     list.add(marker.split(" ")[1] + ";");
                 } else if (!line.matches("(400.*)|(500.*)")

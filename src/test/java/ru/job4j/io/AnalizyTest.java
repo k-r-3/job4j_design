@@ -54,7 +54,7 @@ public class AnalizyTest {
             writer.println("200 10:57:01");
             writer.println("200 10:58:01");
             writer.println("500 10:59:01");
-            writer.println("400 11:01:02");
+            writer.println("500 11:01:02");
             writer.println("200 11:02:02");
         }
         analizy.unavailable(source.getAbsolutePath());
