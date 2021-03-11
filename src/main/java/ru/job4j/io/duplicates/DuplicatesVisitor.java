@@ -6,11 +6,10 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
-    private static HashMap<String, Path> duplicateMap = new HashMap<>();
+    private HashMap<String, Path> duplicateMap = new HashMap<>();
     private HashMap<FileProperty, Path> map = new HashMap<>();
 
     @Override
@@ -25,7 +24,7 @@ public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
         return super.visitFile(file, attrs);
     }
 
-    public static String getDuplicateMap() {
+    public String getDuplicateMap() {
         return duplicateMap.entrySet().stream()
                 .map(e -> e.getKey() + "=" + e.getValue())
                 .collect(Collectors.joining("\n"));
