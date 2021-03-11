@@ -4,8 +4,11 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConsoleChat {
+    private static final Logger LOG = LoggerFactory.getLogger(ConsoleChat.class.getName());
     private static final String OUT = "закончить";
     private static final String STOP = "стоп";
     private static final String CONTINUE = "продолжить";
@@ -49,7 +52,7 @@ public class ConsoleChat {
                 new FileReader(botPath, Charset.forName("WINDOWS-1251")))) {
             answers = br.lines().collect(Collectors.toList());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("wrong bot file", e);
         }
     }
 
@@ -61,6 +64,7 @@ public class ConsoleChat {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            LOG.error("write chat exception", e);
         }
     }
 
