@@ -21,7 +21,7 @@ public class ZipTest {
 
         ArgZip argZip = new ArgZip(new String[]
                 {"java", "-jar", "pack.jar", "-d="
-                        + System.getProperty("java.io.tmpdir"), "-e=class",
+                        + System.getProperty("tmpdir"), "-e=class",
                         "-o=project.zip"});
         Zip zip = new Zip();
         zip.packFiles(argZip.directory(), argZip.output());
