@@ -10,24 +10,21 @@ public class ConsoleChat {
     private static final String STOP = "стоп";
     private static final String CONTINUE = "продолжить";
     private List<String> answers;
+    private List<String> chat = new ArrayList<>();
     private final String path;
+    private final String botPath;
 
-    public ConsoleChat(String path, String botAnswers) {
+    public ConsoleChat(String path, String botPath) {
         this.path = path;
-        try (BufferedReader br = new BufferedReader(
-                new FileReader(botAnswers, Charset.forName("WINDOWS-1251")))) {
-            answers = br.lines().collect(Collectors.toList());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.botPath = botPath;
     }
 
     public void run() {
         Scanner sc = new Scanner(System.in);
-        List<String> chat = new ArrayList<>();
         System.out.println("/////////Chat//////////");
         String question = sc.nextLine();
         do {
+            String answer = botAnswer();
             if (question.equals(STOP)) {
                 while (!question.equals(CONTINUE)) {
                     chat.add(String.format("%s\n", question));
@@ -39,11 +36,24 @@ public class ConsoleChat {
                     }
                 }
             } else {
-                chat.add(String.format("%s\n", botReader(question)));
+                System.out.println(answer);
+                chat.add(String.format("%s\r%s\n", question, answer));
                 question = sc.nextLine();
             }
         } while (!question.equals(OUT));
         chat.add(String.format("%s\n", question));
+    }
+
+    public void readBot() {
+        try (BufferedReader br = new BufferedReader(
+                new FileReader(botPath, Charset.forName("WINDOWS-1251")))) {
+            answers = br.lines().collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeChat() {
         try (BufferedWriter writer = new BufferedWriter(
                 new FileWriter(path, Charset.forName("WINDOWS-1251"), true))) {
             for (String e : chat) {
@@ -54,21 +64,15 @@ public class ConsoleChat {
         }
     }
 
-    private String botReader(String question) {
-        Random rand = new Random();
-        int line = rand.nextInt(5) + 1;
-        String answer = answers.stream()
-                .filter(s -> s.matches(String.valueOf(line) + ".*"))
-                .findFirst()
-                .get()
-                .split("\\d")[1];
-        System.out.println(answer);
-        return String.format("%s\r\n-%s", question, answer);
+    private String botAnswer() {
+        return answers.get(new Random().nextInt(answers.size()));
     }
 
     public static void main(String[] args) {
         ConsoleChat cc = new ConsoleChat("./src/chat/chatWithBot.txt",
                 "./src/chat/botAnswers.txt");
+        cc.readBot();
         cc.run();
+        cc.writeChat();
     }
 }
