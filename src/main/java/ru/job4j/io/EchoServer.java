@@ -46,7 +46,6 @@ public class EchoServer {
         } catch (IOException e) {
             LOG.error("Exception  in server block : ", e);
         }
-        System.exit(-1);
     }
 
     private String resp(String msg) {
