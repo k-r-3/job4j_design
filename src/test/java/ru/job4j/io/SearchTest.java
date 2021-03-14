@@ -33,5 +33,4 @@ public class SearchTest {
         Path javaFile = Files.createTempFile(subDir, null, ".java");
         assertEquals(Search.search(rootDir, ".*md").size(), 1);
     }
-
 }
