@@ -22,19 +22,18 @@ public class Finder {
 
     public Finder() { }
 
-    public void writer(Path out) {
+    public void writer(Path out, List<Path> paths) {
         try (PrintWriter writer = new PrintWriter(out.toFile())) {
-            List<Path> paths = searcher(rootDir, pred);
             paths.forEach(writer::println);
         } catch (IOException e) {
             LOG.error("write exception", e);
         }
     }
 
-    private List<Path> searcher(Path root, Predicate<Path> type) {
-        Walker walker = new Walker(type);
+    public List<Path> searcher() {
+        Walker walker = new Walker(pred);
         try {
-            Files.walkFileTree(root, walker);
+            Files.walkFileTree(rootDir, walker);
         } catch (IOException e) {
             LOG.error("search exception", e);
         }
@@ -55,8 +54,9 @@ public class Finder {
     public static void main(String[] args) {
         ArgsParser parser = new ArgsParser(args);
         if (parser.validateArgs()) {
-            Finder finder = new Finder(parser.getDir(), parser.type());
-            finder.writer(parser.outFile());
+            Finder finder = new Finder(parser.getDir(),
+                    new PredicateFactory(parser).getPredicate());
+            finder.writer(parser.outFile(), finder.searcher());
         } else {
             System.out.println(new Finder().help());
         }

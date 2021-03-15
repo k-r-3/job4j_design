@@ -2,7 +2,6 @@ package ru.job4j.io.finder;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.function.Predicate;
 
 public class ArgsParser {
     private String[] args;
@@ -19,26 +18,8 @@ public class ArgsParser {
         return args[1].split("=")[1];
     }
 
-    public Predicate<Path> type() {
-        String arg = args[2].split("=")[1];
-        switch (arg) {
-            case "name":
-                return path -> path.toFile()
-                        .getName()
-                        .matches(extension());
-            case "mask":
-                return path -> path.toFile()
-                        .getName()
-                        .matches(extension()
-                                .replaceAll("\\*", ".*")
-                        );
-            case "regex":
-                return path -> path.toFile()
-                        .getName()
-                        .matches(extension());
-            default:
-                return null;
-        }
+    public String type() {
+        return args[2].split("=")[1];
     }
 
     public Path outFile() {

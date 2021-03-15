@@ -38,8 +38,9 @@ public class FinderTest {
                 "-d=" + rootDir, "-n=README.md",
                 "-t=name", "-o=" + rootDir + "/log.txt"
         });
-        Finder finder = new Finder(parser.getDir(), parser.type());
-        finder.writer(parser.outFile());
+        Finder finder = new Finder(parser.getDir(),
+                new PredicateFactory(parser).getPredicate());
+        finder.writer(parser.outFile(), finder.searcher());
         assertThat(parser.outFile().toFile().exists(), is(true));
     }
 
@@ -53,8 +54,9 @@ public class FinderTest {
                 "-d=" + rootDir, "-n=" + name,
                 "-t=name", "-o=" + rootDir + "/log.txt"
         });
-        Finder finder = new Finder(parser.getDir(), parser.type());
-        finder.writer(parser.outFile());
+        Finder finder = new Finder(parser.getDir(),
+                new PredicateFactory(parser).getPredicate());
+        finder.writer(parser.outFile(), finder.searcher());
         try (BufferedReader reader = new BufferedReader(
                 new FileReader(parser.outFile().toAbsolutePath().toString()))) {
             String actual = reader.lines().collect(Collectors.joining());
@@ -74,8 +76,9 @@ public class FinderTest {
                 "-d=" + rootDir, "-n=.*.md",
                 "-t=regex", "-o=" + rootDir + "/log.txt"
         });
-        Finder finder = new Finder(parser.getDir(), parser.type());
-        finder.writer(parser.outFile());
+        Finder finder = new Finder(parser.getDir(),
+                new PredicateFactory(parser).getPredicate());
+        finder.writer(parser.outFile(), finder.searcher());
         try (BufferedReader reader = new BufferedReader(
                 new FileReader(parser.outFile().toAbsolutePath().toString()))) {
             String actual = reader.lines().collect(Collectors.joining());
@@ -95,8 +98,9 @@ public class FinderTest {
                 "-d=" + rootDir, "-n=*R**DME.md",
                 "-t=mask", "-o=" + rootDir + "/log.txt"
         });
-        Finder finder = new Finder(parser.getDir(), parser.type());
-        finder.writer(parser.outFile());
+        Finder finder = new Finder(parser.getDir(),
+                new PredicateFactory(parser).getPredicate());
+        finder.writer(parser.outFile(), finder.searcher());
         try (BufferedReader reader = new BufferedReader(
                 new FileReader(parser.outFile().toAbsolutePath().toString()))) {
             String actual = reader.lines().collect(Collectors.joining());
