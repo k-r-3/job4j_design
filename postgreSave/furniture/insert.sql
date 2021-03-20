@@ -1,0 +1,1 @@
+insert into furniture(name, room, weight) values('Desk', 'dining room', 2.5);

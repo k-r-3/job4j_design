@@ -1,0 +1,1 @@
+select p.lastName as Семья, pp.address as улица, pp.id as дом from families as p join house as pp on p.house_id = pp.storey;  
