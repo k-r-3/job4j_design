@@ -16,20 +16,20 @@ public class ConfigTest {
         config.load();
         assertThat(
                 config.value("hibernate.connection.url"),
-                is("jdbc:postgresql://127.0.0.1:5432/trackstudio")
+                is("jdbc:postgresql://127.0.0.1:5432/idea_db")
         );
     }
 
-//    @Test
-//    public void whenPairWithComment() {
-//        String path = "./app.properties";
-//        Config config = new Config(path);
-//        config.load();
-//        assertThat(
-//                Objects.isNull(config.value("hibernate.dialect")),
-//                is(true)
-//        );
-//    }
+    @Test
+    public void whenPairWithComment() {
+        String path = "./app.properties";
+        Config config = new Config(path);
+        config.load();
+        assertThat(
+                Objects.isNull(config.value("hibernate.dialec")),
+                is(true)
+        );
+    }
 
     @Test
     public void whenLinesWithComment() {
