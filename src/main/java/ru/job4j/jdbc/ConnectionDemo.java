@@ -10,37 +10,31 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.stream.Stream;
 
 public class ConnectionDemo {
     final static Logger LOG = LoggerFactory.getLogger(ConnectionDemo.class.getName());
 
+    private String configParse(String value, ConnectionPattern cp, Stream<String> stream) {
+        return stream
+                .filter(l -> cp.getPatt(value)
+                .matcher(l)
+                .find())
+                .findFirst()
+                .get()
+                .split("=")[1];
+    }
+
     public static void main(String[] args) throws ClassNotFoundException {
+        ConnectionDemo cd = new ConnectionDemo();
         String url = "";
         String username = "";
         String password = "";
         try (BufferedReader reader = new BufferedReader(new FileReader("./app.properties"))) {
             ConnectionPattern cp = new ConnectionPattern();
-            url = reader.lines()
-                    .filter(l -> cp.getPatt("url")
-                            .matcher(l)
-                            .find())
-                    .findFirst()
-                    .get()
-                    .split("=")[1];
-            username = reader.lines()
-                    .filter(l -> cp.getPatt("username")
-                            .matcher(l)
-                            .find())
-                    .findFirst()
-                    .get()
-                    .split("=")[1];
-            password = reader.lines()
-                    .filter(l -> cp.getPatt("password")
-                            .matcher(l)
-                            .find())
-                    .findFirst()
-                    .get()
-                    .split("=")[1];
+            url = cd.configParse("url", cp, reader.lines());
+            username = cd.configParse("username", cp, reader.lines());
+            password = cd.configParse("password", cp, reader.lines());
         } catch (IOException e) {
             LOG.error("Reader exception", e);
         }
@@ -50,7 +44,7 @@ public class ConnectionDemo {
             System.out.println(metaData.getUserName());
             System.out.println(metaData.getURL());
         } catch (SQLException e) {
-            e.printStackTrace();
+           LOG.error("DB connection exception", e);
         }
     }
 }
