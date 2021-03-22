@@ -1,11 +1,11 @@
 select t.name, p.name from type as t join product p on t.id = p.type_id;
 
-select count(t.name) from product p join type t on p.type_id = t.id
+select p.name from type t join product p on p.type_id = t.id
 where t.name = 'сыр';
 
 select p.name from product p where upper(p.name) like upper('%мороженное%');
 
-select * from product where product.expired_date > make_date(2021, 3, 20) + interval '1 month';
+select * from product where product.expired_date > current_date + interval '1 month';
 
 select * from product order by product.price desc 
 limit 1;
