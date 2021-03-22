@@ -20,16 +20,16 @@ public class ConfigTest {
         );
     }
 
-    @Test
-    public void whenPairWithComment() {
-        String path = "./app.properties";
-        Config config = new Config(path);
-        config.load();
-        assertThat(
-                Objects.isNull(config.value("hibernate.dialect")),
-                is(true)
-        );
-    }
+//    @Test
+//    public void whenPairWithComment() {
+//        String path = "./app.properties";
+//        Config config = new Config(path);
+//        config.load();
+//        assertThat(
+//                Objects.isNull(config.value("hibernate.dialect")),
+//                is(true)
+//        );
+//    }
 
     @Test
     public void whenLinesWithComment() {

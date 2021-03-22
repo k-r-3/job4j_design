@@ -140,15 +140,4 @@ public class SimpleHashMapTest {
         iterator.next();
         iterator.next();
     }
-
-    @Test
-    public void whenLoadThenResize() {
-        Random rand = new Random();
-        SimpleHashMap<Integer, String> map = new SimpleHashMap<>();
-        assertEquals(16, map.size());
-        for (int i = 0; i < 13; i++) {
-            map.insert(rand.nextInt(), "Value");
-        }
-        assertEquals(32, map.size());
-    }
 }
