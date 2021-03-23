@@ -5,7 +5,8 @@ where t.name = 'сыр';
 
 select p.name from product p where upper(p.name) like upper('%мороженное%');
 
-select * from product where product.expired_date > current_date + interval '1 month';
+select * from product p
+where date_part('month', p.expired_date) = date_part('month', current_date + interval '1 month')
 
 select * from product order by product.price desc 
 limit 1;
