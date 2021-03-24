@@ -7,6 +7,7 @@ public class ConnectionPattern {
         Pattern urlCompile = Pattern.compile(".*url.*");
         Pattern userCompile = Pattern.compile(".*username.*");
         Pattern passwrodCompile = Pattern.compile(".*password.*");
+        Pattern driverCompile = Pattern.compile(".*driver.*");
         switch (value) {
             case "url" :
                 return urlCompile;
@@ -14,6 +15,8 @@ public class ConnectionPattern {
                 return userCompile;
             case "password" :
                 return passwrodCompile;
+            case "driver" :
+                return driverCompile;
             default :
                 return null;
         }

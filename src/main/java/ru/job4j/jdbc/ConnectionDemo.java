@@ -2,7 +2,6 @@ package ru.job4j.jdbc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,19 +12,19 @@ public class ConnectionDemo {
 
     private static Connection getConnection() throws ClassNotFoundException, SQLException {
         ConnectionDemo cd = new ConnectionDemo();
-        ConfigParser parser = new ConfigParser();
         String url = "";
         String username = "";
         String password = "";
         try (BufferedReader reader = new BufferedReader(new FileReader("./app.properties"))) {
+            ConfigParser parser = new ConfigParser(reader);
             ConnectionPattern cp = new ConnectionPattern();
-            url = parser.getConfig("url", cp, reader.lines());
-            username = parser.getConfig("username", cp, reader.lines());
-            password = parser.getConfig("password", cp, reader.lines());
+            url = parser.getConfig("url", cp);
+            username = parser.getConfig("username", cp);
+            password = parser.getConfig("password", cp);
+            Class.forName(parser.getConfig("driver", cp));
         } catch (IOException e) {
             LOG.error("Reader exception", e);
         }
-        Class.forName("org.postgresql.Driver");
         return DriverManager.getConnection(url, username, password);
     }
 

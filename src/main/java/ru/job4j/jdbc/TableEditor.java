@@ -28,16 +28,16 @@ public class TableEditor implements AutoCloseable {
         String url = "";
         String username = "";
         String password = "";
-        ConfigParser parser = new ConfigParser();
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            ConfigParser parser = new ConfigParser(reader);
             ConnectionPattern pattern = new ConnectionPattern();
-            url = parser.getConfig("url", pattern, reader.lines());
-            username = parser.getConfig("username", pattern, reader.lines());
-            password = parser.getConfig("password", pattern, reader.lines());
+            url = parser.getConfig("url", pattern);
+            username = parser.getConfig("username", pattern);
+            password = parser.getConfig("password", pattern);
+            Class.forName(parser.getConfig("driver", pattern));
         } catch (IOException e) {
             LOG.error("Reader exception", e);
         }
-        Class.forName("org.postgresql.Driver");
         connection = DriverManager.getConnection(url, username, password);
     }
 
