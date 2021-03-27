@@ -2,35 +2,34 @@ package ru.job4j.jdbc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
+import java.util.Properties;
 
 public class ConnectionDemo {
     final static Logger LOG = LoggerFactory.getLogger(ConnectionDemo.class.getName());
 
     private static Connection getConnection() throws ClassNotFoundException, SQLException {
-        ConnectionDemo cd = new ConnectionDemo();
-        String url = "";
-        String username = "";
-        String password = "";
-        try (BufferedReader reader = new BufferedReader(new FileReader("./app.properties"))) {
-            ConfigParser parser = new ConfigParser(reader);
-            ConnectionPattern cp = new ConnectionPattern();
-            url = parser.getConfig("url", cp);
-            username = parser.getConfig("username", cp);
-            password = parser.getConfig("password", cp);
-            Class.forName(parser.getConfig("driver", cp));
+        Properties properties = new Properties();
+        Connection connection = null;
+        try (InputStream in = ConnectionDemo.class.getClassLoader()
+                .getResourceAsStream("appOld.properties")) {
+            properties.load(in);
+            Class.forName(properties.getProperty("driver_class"));
+            connection = DriverManager.getConnection(
+                    properties.getProperty("url"),
+                    properties.getProperty("username"),
+                    properties.getProperty("password"));
         } catch (IOException e) {
-            LOG.error("Reader exception", e);
+            e.printStackTrace();
         }
-        return DriverManager.getConnection(url, username, password);
+        return connection;
     }
 
     public static String getTableScheme(Connection connection, String tableName) throws Exception {
         StringBuilder scheme = new StringBuilder();
-        DatabaseMetaData metaData = connection.getMetaData();
+            DatabaseMetaData metaData = connection.getMetaData();
         try (ResultSet columns = metaData.getColumns(null, null, tableName, null)) {
             scheme.append(String.format("%-15s %-15s%n", "column", "type"));
             while (columns.next()) {

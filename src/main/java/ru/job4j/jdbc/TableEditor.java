@@ -2,10 +2,8 @@ package ru.job4j.jdbc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
 
@@ -25,20 +23,17 @@ public class TableEditor implements AutoCloseable {
     }
 
     private void initConnection() throws SQLException, ClassNotFoundException {
-        String url = "";
-        String username = "";
-        String password = "";
-        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-            ConfigParser parser = new ConfigParser(reader);
-            ConnectionPattern pattern = new ConnectionPattern();
-            url = parser.getConfig("url", pattern);
-            username = parser.getConfig("username", pattern);
-            password = parser.getConfig("password", pattern);
-            Class.forName(parser.getConfig("driver", pattern));
+        try (InputStream in = TableEditor.class.getClassLoader()
+                .getResourceAsStream("app.properties")) {
+         properties.load(in);
+         Class.forName(properties.getProperty("driver_class"));
+         connection = DriverManager.getConnection(
+                 properties.getProperty("url"),
+                 properties.getProperty("username"),
+                 properties.getProperty("password"));
         } catch (IOException e) {
-            LOG.error("Reader exception", e);
+            e.printStackTrace();
         }
-        connection = DriverManager.getConnection(url, username, password);
     }
 
     private void initStatement() throws SQLException {
