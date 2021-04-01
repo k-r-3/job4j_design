@@ -1,6 +1,6 @@
-select p.name from person p where p.company_id <> 5;
-select p.name, c.name from person p left join company c on p.company_id = c.id;
+select p.name, c.name, c.id as company_id from person p join company c on p.company_id = c.id 
+where p.company_id <> 5;
 
-with data as(select c.name as cn, count(p.name) as pn from person p left join company c on p.company_id = c.id 
+with data as(select c.name as company_name, count(p.name) as employees_amount from person p left join company c on p.company_id = c.id 
 group by c.name)
-select * from data where pn = (select max(pn) from data) 
+select * from data where employees_amount = (select max(employees_amount) from data) 
