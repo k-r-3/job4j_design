@@ -7,9 +7,16 @@ insert into meeting(name) values('meeting3');
 insert into meeting(name) values('meeting4');
 insert into meeting(name) values('meeting5');
 
-insert into users(name, meeting, status)  values('Ivan', 1, 1);
-insert into users(name, meeting, status)  values('Ivan', 2, 1);
-insert into users(name, meeting)  values('Ivan', 3);
-insert into users(name, meeting)  values('Boris', 1);
-insert into users(name, meeting, status)  values('Boris', 2, 1);
-insert into users(name, meeting, status)  values('Boris', 3, 1);
+insert into users(name)  values('Ivan');
+insert into users(name)  values('Boris');
+
+insert into meetings_users(meeting_id, user_id, status_id) values(1, 1, 1);
+insert into meetings_users(meeting_id, user_id, status_id) values(1, 2, 1);
+insert into meetings_users(meeting_id, user_id, status_id) values(2, 1, 2);
+insert into meetings_users(meeting_id, user_id, status_id) values(2, 2, 1);
+insert into meetings_users(meeting_id, user_id, status_id) values(3, 1, 2);
+insert into meetings_users(meeting_id, user_id, status_id) values(3, 2, 2);
+insert into meetings_users(meeting_id, user_id, status_id) values(4, 1, 1);
+insert into meetings_users(meeting_id, user_id, status_id) values(4, 2, 2);
+insert into meetings_users(meeting_id, user_id, status_id) values(5, 1, 2);
+insert into meetings_users(meeting_id, user_id, status_id) values(5, 2, 2);
