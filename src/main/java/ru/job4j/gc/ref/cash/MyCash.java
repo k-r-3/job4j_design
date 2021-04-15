@@ -3,15 +3,15 @@ package ru.job4j.gc.ref.cash;
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 
-abstract class MyCash {
-    private HashMap<String, SoftReference<String>> map = new HashMap<>();
+abstract class MyCash<K, V extends SoftReference<?>> {
+    private HashMap<K, V> map = new HashMap<>();
 
-    protected HashMap<String, SoftReference<String>> getMap() {
+    protected HashMap<K, V> getMap() {
         return map;
     }
 
-    public String getValue(String key) {
-        String value;
+    public Object getValue(String key) {
+        Object value;
         if (map.get(key) == null) {
             load(key);
         }
