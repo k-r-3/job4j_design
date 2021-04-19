@@ -20,7 +20,7 @@ abstract class MyCache<K, V> {
         V value;
         if (map.get(key) == null || map.get(key).get() == null) {
             load(key);
-            if (queue.poll() != null) {
+            if (map.get(key).get() == null) {
                 return getValue(key);
                 }
         }
