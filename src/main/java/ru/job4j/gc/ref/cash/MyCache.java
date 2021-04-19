@@ -18,15 +18,13 @@ abstract class MyCache<K, V> {
 
     public V getValue(K key) {
         V value;
-        if (map.get(key) == null || map.get(key).get() == null) {
-            load(key);
-            if (queue.poll() != null) {
-                return getValue(key);
-                }
+        SoftReference<V> ref = map.get(key);
+        if (ref == null || ref.get() == null) {
+            return load(key);
         }
-        value = map.get(key).get();
+        value = ref.get();
         return value;
     }
 
-    abstract void load(K key);
+    abstract V load(K key);
 }
