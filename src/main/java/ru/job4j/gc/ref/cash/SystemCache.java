@@ -9,22 +9,17 @@ import java.util.stream.Collectors;
 public class SystemCache extends MyCache<String, String> {
 
     @Override
-     String load(String key) {
-        String value = "";
+     protected void load(String key) {
         try (BufferedReader reader = new BufferedReader(new FileReader(key))) {
             SoftReference<String> ref = new SoftReference<>(reader.lines()
-                    .collect(Collectors.joining(System.lineSeparator())),
-                    super.getQueue());
-            value = ref.get();
+                    .collect(Collectors.joining(System.lineSeparator())));
             super.getMap().put(key, ref);
-            ref.clear();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return value;
     }
 
-    public String getValue(String key) {
-        return super.getValue(key);
-    }
+//    public String getValue(String key) {
+//        return super.getValue(key);
+//    }
 }
