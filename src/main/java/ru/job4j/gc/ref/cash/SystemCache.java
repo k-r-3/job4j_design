@@ -17,6 +17,7 @@ public class SystemCache extends MyCache<String, String> {
                     super.getQueue());
             value = ref.get();
             super.getMap().put(key, ref);
+            ref.clear();
         } catch (IOException e) {
             e.printStackTrace();
         }
