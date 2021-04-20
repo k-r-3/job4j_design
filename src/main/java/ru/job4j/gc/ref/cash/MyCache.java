@@ -17,15 +17,17 @@ abstract class MyCache<K, V> {
     }
 
     public V getValue(K key) {
-        V value = null;
-        SoftReference<V> ref = map.get(key);
-        if (ref == null || ref.get() == null) {
-            while (value == null) {
-                value = load(key);
-            }
-            return value;
+        V value;
+        if (!map.containsKey(key)) {
+            load(key);
         }
+        SoftReference<V> ref = map.get(key);
         value = ref.get();
+        while (value == null) {
+            load(key);
+            ref = map.get(key);
+            value = ref.get();
+        }
         return value;
     }
 
