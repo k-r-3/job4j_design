@@ -9,8 +9,5 @@ public class CacheClient {
         System.out.println(cash.getValue("GCTest4.txt"));
         System.out.println(cash.getValue("GCTest4.txt"));
         System.out.println(cash.getValue("GCTest3.txt"));
-        System.out.println(cash.getValue("404.txt"));
-        System.out.println(cash.getValue("log.txt"));
-        System.out.println(cash.getValue("result.txt"));
     }
 }
