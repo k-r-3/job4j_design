@@ -20,6 +20,6 @@ public class SystemCache extends MyCache<String, String> {
     }
 
     public String getValue(String key) {
-        return super.getValue(key);
+        return (String) super.getValue(key);
     }
 }
