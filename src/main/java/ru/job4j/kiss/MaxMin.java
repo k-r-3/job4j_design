@@ -19,10 +19,14 @@ public class MaxMin {
         T element = iterator.next();
         while (iterator.hasNext()) {
             T currElement = iterator.next();
-            if (comparator.compare(element, currElement) == order) {
+            if (compPred(comparator.compare(element, currElement), order)) {
                 element = currElement;
             }
         }
         return element;
+    }
+
+    private boolean compPred(int result, int order) {
+        return (result > 0 && order > 0) || (result < 0 && order < 0);
     }
 }

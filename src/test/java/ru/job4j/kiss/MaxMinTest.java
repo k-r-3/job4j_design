@@ -30,4 +30,24 @@ public class MaxMinTest {
         assertThat(actual, is(expect));
     }
 
+    @Test
+    public void whenMaxString() {
+        List<String> list = List.of("one", "three", "nine", "two");
+        Comparator<String> comp = String::compareTo;
+        MaxMin maxmin = new MaxMin();
+        String actual = maxmin.max(list, comp);
+        String expect = "two";
+        assertThat(actual, is(expect));
+    }
+
+    @Test
+    public void whenMinSring() {
+        List<String> list = List.of("one", "three", "nine", "two");
+        Comparator<String> comp = String::compareTo;
+        MaxMin maxmin = new MaxMin();
+        String actual = maxmin.min(list, comp);
+        String expect = "nine";
+        assertThat(actual, is(expect));
+    }
+
 }
