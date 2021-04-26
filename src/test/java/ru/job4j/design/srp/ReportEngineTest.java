@@ -3,15 +3,11 @@ package ru.job4j.design.srp;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import javax.xml.bind.JAXBException;
 import java.util.Calendar;
+import java.util.Comparator;
 
 public class ReportEngineTest {
 
@@ -33,13 +29,8 @@ public class ReportEngineTest {
         assertThat(engine.generate(em -> true), is(expect.toString()));
     }
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
-
     @Test
-    public void whenNewGenerated() throws IOException {
-        Path root = folder.newFolder().toPath();
-        Path file = Files.createTempFile(root, "temp", ".html");
+    public void whenNewGenerated() {
         MemStore store = new MemStore();
         Employee worker1 = new Employee("Ivan", 300);
         Employee worker2 = new Employee("Boris", 200);
@@ -48,12 +39,60 @@ public class ReportEngineTest {
         store.add(worker2);
         store.add(worker3);
         Report engine = new ReportEngine(store);
-        String expect = "<html><body><h1>Emploeeys</h1><html><body><h2>Name Salary"
-                + "</h2><textarea cols=16 rows=10>"
-                + "Ivan300.0"
-                + "Boris200.0"
-                + "Nikolay100.0";
-        assertThat(engine.generateHTML(em -> true, file), is(expect));
+        String expect = "<html><body><h1>Employees</h1><html><body><h2>Name Salary</h2>"
+                + "<textarea cols=16 rows=10>"
+                + "Ivan 300.0"
+                + "Boris 200.0"
+                + "Nikolay 100.0";
+        Comparator<Employee> comp = Comparator.comparingDouble(Employee::getSalary).reversed();
+        assertThat(engine.generateHTML(comp), is(expect));
+    }
 
+    @Test
+    public void whenJSONGenerated() {
+        MemStore store = new MemStore();
+        Employee worker1 = new Employee("Ivan", 300);
+        Employee worker2 = new Employee("Boris", 200);
+        Employee worker3 = new Employee("Nikolay", 100);
+        store.add(worker1);
+        store.add(worker2);
+        store.add(worker3);
+        Report engine = new ReportEngine(store);
+        String expect = "{\"Salary\":300,\"Name\":\"Ivan\"}"
+                + "{\"Salary\":200,\"Name\":\"Boris\"}"
+                + "{\"Salary\":100,\"Name\":\"Nikolay\"}";
+        Comparator<Employee> comp = Comparator.comparingDouble(Employee::getSalary).reversed();
+        String actual = engine.generateJSON(comp);
+        assertThat(actual, is(expect));
+    }
+
+    @Test
+    public void whenXMLGenerated() throws JAXBException {
+        MemStore store = new MemStore();
+        Employee worker1 = new Employee("Ivan", 300);
+        Employee worker2 = new Employee("Boris", 200);
+        Employee worker3 = new Employee("Nikolay", 100);
+        store.add(worker1);
+        store.add(worker2);
+        store.add(worker3);
+        Report engine = new ReportEngine(store);
+        String expect = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+                + "<employee>\n"
+                + "    <name>Ivan</name>\n"
+                + "    <salary>300.0</salary>\n"
+                + "</employee>\n"
+                + "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+                + "<employee>\n"
+                + "    <name>Boris</name>\n"
+                + "    <salary>200.0</salary>\n"
+                + "</employee>\n"
+                + "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+                + "<employee>\n"
+                + "    <name>Nikolay</name>\n"
+                + "    <salary>100.0</salary>\n"
+                + "</employee>\n";
+        Comparator<Employee> comp = Comparator.comparingDouble(Employee::getSalary).reversed();
+        String actual = engine.generateXML(comp);
+        assertThat(actual, is(expect));
     }
 }

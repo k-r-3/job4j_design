@@ -1,9 +1,14 @@
 package ru.job4j.design.srp;
 
-import java.io.*;
-import java.nio.file.Path;
+import java.io.StringWriter;
 import java.util.Comparator;
 import java.util.function.Predicate;
+
+import org.json.*;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 public class ReportEngine implements Report {
     private Store store;
@@ -27,26 +32,40 @@ public class ReportEngine implements Report {
     }
 
     @Override
-    public String generateHTML(Predicate<Employee> filter, Path path) {
+    public String generateHTML(Comparator<Employee> comp) {
         StringBuilder sb = new StringBuilder();
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path.toString()))) {
-            bw.write("<html><body><h1>Emploeeys</h1>");
-            bw.write("<html><body><h2>Name Salary</h2>");
-            bw.write("<textarea cols=16 rows=10>");
-            for (Employee employee : store.findSort(Comparator
-                    .comparing(Employee::getSalary).reversed())) {
-                bw.write(employee.getName());
-                bw.write(employee.getSalary() + "");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try (BufferedReader reader = new BufferedReader(new FileReader(path.toString()))) {
-            reader.lines()
-                    .forEach(sb::append);
-        } catch (IOException e) {
-            e.printStackTrace();
+        sb.append("<html><body><h1>Employees</h1>");
+        sb.append("<html><body><h2>Name Salary</h2>");
+        sb.append("<textarea cols=16 rows=10>");
+        for (Employee employee : store.findSort(comp)) {
+            sb.append(employee.getName())
+                    .append(" ").append(employee.getSalary());
         }
         return sb.toString();
+    }
+
+    @Override
+    public String generateJSON(Comparator<Employee> comp) {
+        StringBuilder sb = new StringBuilder();
+        JSONObject jsonObject;
+        for (Employee employee : store.findSort(comp)) {
+            jsonObject = new JSONObject();
+            jsonObject.put("Name", employee.getName());
+            jsonObject.put("Salary", employee.getSalary());
+            sb.append(jsonObject.toString());
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public String generateXML(Comparator<Employee> comp) throws JAXBException {
+        StringWriter sw = new StringWriter();
+        JAXBContext context = JAXBContext.newInstance(Employee.class);
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        for (Employee employee : store.findSort(comp)) {
+            marshaller.marshal(employee, sw);
+        }
+        return sw.toString();
     }
 }
