@@ -87,4 +87,50 @@ public class ReportEngineTest {
                 .append(System.lineSeparator());
         assertThat(report.generate(em -> true), is(expect.toString()));
     }
+
+    @Test
+    public void whenJSONGenerated() {
+        MemStore store = new MemStore();
+        Employee worker1 = new Employee("Ivan", 300);
+        Employee worker2 = new Employee("Boris", 200);
+        Employee worker3 = new Employee("Nikolay", 100);
+        store.add(worker1);
+        store.add(worker2);
+        store.add(worker3);
+        Report report = new JSONReport(store);
+        String expect = "{\"Salary\":300,\"Name\":\"Ivan\"}"
+                + "{\"Salary\":200,\"Name\":\"Boris\"}"
+                + "{\"Salary\":100,\"Name\":\"Nikolay\"}";
+        String actual = report.generate(em -> true);
+        assertThat(actual, is(expect));
+    }
+
+    @Test
+    public void whenXMLGenerated() {
+        MemStore store = new MemStore();
+        Employee worker1 = new Employee("Ivan", 300);
+        Employee worker2 = new Employee("Boris", 200);
+        Employee worker3 = new Employee("Nikolay", 100);
+        store.add(worker1);
+        store.add(worker2);
+        store.add(worker3);
+        Report report = new XMLReport(store);
+        String expect = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+                + "<employee>\n"
+                + "    <name>Ivan</name>\n"
+                + "    <salary>300.0</salary>\n"
+                + "</employee>\n"
+                + "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+                + "<employee>\n"
+                + "    <name>Boris</name>\n"
+                + "    <salary>200.0</salary>\n"
+                + "</employee>\n"
+                + "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+                + "<employee>\n"
+                + "    <name>Nikolay</name>\n"
+                + "    <salary>100.0</salary>\n"
+                + "</employee>\n";
+        String actual = report.generate(em -> true);
+        assertThat(actual, is(expect));
+    }
 }
