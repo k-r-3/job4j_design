@@ -97,10 +97,11 @@ public class ReportEngineTest {
         store.add(worker1);
         store.add(worker2);
         store.add(worker3);
-        Report report = new JSONReport(store);
-        String expect = "{\"Salary\":300,\"Name\":\"Ivan\"}"
-                + "{\"Salary\":200,\"Name\":\"Boris\"}"
-                + "{\"Salary\":100,\"Name\":\"Nikolay\"}";
+        Employees employees = new Employees(store.findBy(em -> true));
+        Report report = new JSONReport(employees);
+        String expect = "{\"Employee\":[{\"name\":\"Ivan\",\"salary\":300},"
+                +"{\"name\":\"Boris\",\"salary\":200},"
+                +"{\"name\":\"Nikolay\",\"salary\":100}]}";
         String actual = report.generate(em -> true);
         assertThat(actual, is(expect));
     }
@@ -114,22 +115,23 @@ public class ReportEngineTest {
         store.add(worker1);
         store.add(worker2);
         store.add(worker3);
-        Report report = new XMLReport(store);
+        Employees employees = new Employees(store.findBy(em -> true));
+        Report report = new XMLReport(employees);
         String expect = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
-                + "<employee>\n"
-                + "    <name>Ivan</name>\n"
-                + "    <salary>300.0</salary>\n"
-                + "</employee>\n"
-                + "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
-                + "<employee>\n"
-                + "    <name>Boris</name>\n"
-                + "    <salary>200.0</salary>\n"
-                + "</employee>\n"
-                + "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
-                + "<employee>\n"
-                + "    <name>Nikolay</name>\n"
-                + "    <salary>100.0</salary>\n"
-                + "</employee>\n";
+                + "<employees>\n"
+                + "    <files>\n"
+                + "        <name>Ivan</name>\n"
+                + "        <salary>300.0</salary>\n"
+                + "    </files>\n"
+                + "    <files>\n"
+                + "        <name>Boris</name>\n"
+                + "        <salary>200.0</salary>\n"
+                + "    </files>\n"
+                + "    <files>\n"
+                + "        <name>Nikolay</name>\n"
+                + "        <salary>100.0</salary>\n"
+                + "    </files>\n"
+                + "</employees>\n";
         String actual = report.generate(em -> true);
         assertThat(actual, is(expect));
     }

@@ -1,10 +1,8 @@
 package ru.job4j.design.srp;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Calendar;
 import java.util.Objects;
 
-@XmlRootElement
 public class Employee {
     private String name;
     private Calendar hired;
@@ -76,5 +74,12 @@ public class Employee {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return  "name='" + name + '\''
+                + ", salary="
+                + salary;
     }
 }

@@ -7,26 +7,25 @@ import java.io.StringWriter;
 import java.util.function.Predicate;
 
 public class XMLReport implements Report {
-    private Store store;
+    private Employees employees;
 
-    public XMLReport(Store store) {
-        this.store = store;
+    public XMLReport(Employees employees) {
+        this.employees = employees;
     }
 
     @Override
     public String generate(Predicate<Employee> filter) {
-        StringWriter sw = new StringWriter();
+        StringBuilder sb = new StringBuilder();
         try {
-            JAXBContext context = JAXBContext.newInstance(Employee.class);
+            JAXBContext context = JAXBContext.newInstance(Employees.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            for (Employee employee : store.findBy(filter)) {
-                marshaller.marshal(employee, sw);
-            }
+                StringWriter sw = new StringWriter();
+                marshaller.marshal(employees, sw);
+                sb.append(sw.toString());
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-        System.out.println(sw.toString());
-        return sw.toString();
+        return sb.toString();
     }
 }
