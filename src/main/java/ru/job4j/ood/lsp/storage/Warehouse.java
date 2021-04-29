@@ -12,15 +12,16 @@ public class Warehouse implements Storage {
     }
 
     @Override
-    public String getFoods() {
-        return foods.toString();
+    public List<Food> getFoods() {
+        return foods;
     }
 
     @Override
-    public void validate(Food food) {
-        float days = getRemaining(food);
-            if (days > 0
-                    && (((days - food.getExpiryDate()) / food.getExpiryDate()) * 100) < 25) {
+    public void validate(Food food, float remainingDays) {
+        float expirationPercent = (
+                ((food.getExpiryDate() - remainingDays) / food.getExpiryDate()) * 100
+        );
+            if (remainingDays > 0 && expirationPercent < 25) {
                 add(food);
         }
     }

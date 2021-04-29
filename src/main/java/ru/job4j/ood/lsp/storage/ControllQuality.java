@@ -6,29 +6,37 @@ import java.util.List;
 public class ControllQuality {
     private final static LocalDate DATE = LocalDate.of(2021, 4, 29);
     protected List<Food> foods;
-    protected Storage storage;
+    private AvailableStorage storages;
 
-    public ControllQuality(List<Food> foods, Storage storage) {
+    public ControllQuality(List<Food> foods, AvailableStorage storages) {
         this.foods = foods;
-        this.storage = storage;
-        validate(foods);
+        this.storages = storages;
+        validateSort(foods);
     }
 
-    public Storage getStorage() {
-        return storage;
-    }
-
-    protected float getRemaining(Food food) {
+    private float getRemaining(Food food) {
         return food.getExpiryDate() - (DATE
                 .getDayOfYear() - food.getCreateDate()
                 .getDayOfYear());
     }
 
-    void validate(List<Food> foods) {
+    void validateSort(List<Food> foods) {
         for (Food food : foods) {
-            if (getRemaining(food) > 0) {
-                storage.add(food);
+            float daysLeft = getRemaining(food);
+            for (Storage storage : storages.getStorageList()) {
+                storage.validate(food, daysLeft);
             }
         }
+    }
+
+    public String report() {
+        StringBuilder sb = new StringBuilder();
+        for (Storage storage : storages.getStorageList()) {
+            sb.append("Foods in " + storage.getClass().getSimpleName() + " : ")
+                    .append(System.lineSeparator())
+                    .append(storage.getFoods().toString())
+                    .append(System.lineSeparator());
+        }
+        return sb.toString();
     }
 }

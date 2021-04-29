@@ -12,13 +12,13 @@ public class Trash implements Storage {
     }
 
     @Override
-    public String getFoods() {
-        return foods.toString();
+    public List<Food> getFoods() {
+        return foods;
     }
 
     @Override
-    public void validate(Food food) {
-        if (getRemaining(food) <= 0) {
+    public void validate(Food food, float remainingDays) {
+        if (remainingDays <= 0) {
             add(food);
         }
     }
