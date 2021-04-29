@@ -7,10 +7,10 @@ import java.io.StringWriter;
 import java.util.function.Predicate;
 
 public class XMLReport implements Report {
-    private Employees employees;
+    private Store store;
 
-    public XMLReport(Employees employees) {
-        this.employees = employees;
+    public XMLReport(Store store) {
+        this.store = store;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class XMLReport implements Report {
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                 StringWriter sw = new StringWriter();
-                marshaller.marshal(employees, sw);
+                marshaller.marshal(store, sw);
                 sb.append(sw.toString());
         } catch (JAXBException e) {
             e.printStackTrace();

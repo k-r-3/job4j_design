@@ -97,8 +97,7 @@ public class ReportEngineTest {
         store.add(worker1);
         store.add(worker2);
         store.add(worker3);
-        Employees employees = new Employees(store.findBy(em -> true));
-        Report report = new JSONReport(employees);
+        Report report = new JSONReport(store);
         String expect = "{\"Employee\":[{\"name\":\"Ivan\",\"salary\":300},"
                 +"{\"name\":\"Boris\",\"salary\":200},"
                 +"{\"name\":\"Nikolay\",\"salary\":100}]}";

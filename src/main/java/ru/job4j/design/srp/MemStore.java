@@ -20,11 +20,4 @@ public class MemStore implements Store {
                 filter(filter).
                 collect(Collectors.toList());
     }
-
-    @Override
-    public List<Employee> findSort(Comparator<Employee> comp) {
-        return employees.stream()
-                .sorted(comp)
-                .collect(Collectors.toList());
-    }
 }

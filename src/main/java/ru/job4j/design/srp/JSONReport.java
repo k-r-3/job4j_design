@@ -5,18 +5,16 @@ import org.json.JSONObject;
 import java.util.function.Predicate;
 
 public class JSONReport implements Report {
-    private Employees employees;
+    private Store store;
 
-    public JSONReport(Employees employees) {
-        this.employees = employees;
+    public JSONReport(Store store) {
+        this.store = store;
     }
 
     @Override
     public String generate(Predicate<Employee> filter) {
-        StringBuilder sb = new StringBuilder();
         JSONObject jsonObject = new JSONObject();
-            jsonObject.put("Employee", employees.getFiles());
-            sb.append(jsonObject.toString());
-        return sb.toString();
+        jsonObject.put("Employee", store.findBy(filter));
+        return jsonObject.toString();
     }
 }
