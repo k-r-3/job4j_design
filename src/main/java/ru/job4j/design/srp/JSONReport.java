@@ -2,6 +2,8 @@ package ru.job4j.design.srp;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class JSONReport implements Report {
@@ -14,13 +16,14 @@ public class JSONReport implements Report {
     @Override
     public String generate(Predicate<Employee> filter) {
         StringBuilder sb = new StringBuilder();
+        List<JSONObject> jsons = new ArrayList<>();
         JSONObject jsonObject;
         for (Employee employee : store.findBy(filter)) {
             jsonObject = new JSONObject();
             jsonObject.put("Name", employee.getName());
             jsonObject.put("Salary", employee.getSalary());
-            sb.append(jsonObject.toString());
+            jsons.add(jsonObject);
         }
-        return sb.toString();
+        return jsons.toString();
     }
 }
