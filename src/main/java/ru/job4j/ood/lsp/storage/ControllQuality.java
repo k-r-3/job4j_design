@@ -4,11 +4,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ControllQuality {
-    private final static LocalDate DATE = LocalDate.of(2021, 4, 29);
-    protected List<Food> foods;
-    private AvailableStorage storages;
+    private final static LocalDate DATE = LocalDate.now();
+    private List<Food> foods;
+    private List<Storage> storages;
 
-    public ControllQuality(List<Food> foods, AvailableStorage storages) {
+    public ControllQuality(List<Food> foods, List<Storage> storages) {
         this.foods = foods;
         this.storages = storages;
         validateSort(foods);
@@ -23,15 +23,15 @@ public class ControllQuality {
     void validateSort(List<Food> foods) {
         for (Food food : foods) {
             float daysLeft = getRemaining(food);
-            for (Storage storage : storages.getStorageList()) {
-                storage.validate(food, daysLeft);
+            for (Storage storage : storages) {
+                storage.add(food, daysLeft);
             }
         }
     }
 
     public String report() {
         StringBuilder sb = new StringBuilder();
-        for (Storage storage : storages.getStorageList()) {
+        for (Storage storage : storages) {
             sb.append("Foods in " + storage.getClass().getSimpleName() + " : ")
                     .append(System.lineSeparator())
                     .append(storage.getFoods().toString())

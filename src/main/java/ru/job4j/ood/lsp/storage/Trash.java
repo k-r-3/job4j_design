@@ -7,8 +7,12 @@ public class Trash implements Storage {
     private List<Food> foods = new ArrayList<>();
 
     @Override
-    public void add(Food food) {
-        foods.add(food);
+    public boolean add(Food food, float remainingDays) {
+        if (validate(food, remainingDays)) {
+            foods.add(food);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -17,9 +21,7 @@ public class Trash implements Storage {
     }
 
     @Override
-    public void validate(Food food, float remainingDays) {
-        if (remainingDays <= 0) {
-            add(food);
-        }
+    public boolean validate(Food food, float remainingDays) {
+        return remainingDays <= 0;
     }
 }

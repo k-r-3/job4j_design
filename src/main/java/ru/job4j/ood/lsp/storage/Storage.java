@@ -4,10 +4,10 @@ import java.util.List;
 
 public interface Storage {
 
-    void add(Food food);
+    boolean add(Food food, float remainingDays);
 
     List<Food> getFoods();
 
-    void validate(Food foods, float remainingDays);
+    boolean validate(Food foods, float remainingDays);
 
 }
