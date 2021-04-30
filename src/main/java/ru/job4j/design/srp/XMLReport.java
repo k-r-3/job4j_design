@@ -21,7 +21,7 @@ public class XMLReport implements Report {
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                 StringWriter sw = new StringWriter();
-                marshaller.marshal(store, sw);
+                marshaller.marshal(new Employees(store.findBy(filter)), sw);
                 sb.append(sw.toString());
         } catch (JAXBException e) {
             e.printStackTrace();

@@ -114,8 +114,7 @@ public class ReportEngineTest {
         store.add(worker1);
         store.add(worker2);
         store.add(worker3);
-        Employees employees = new Employees(store.findBy(em -> true));
-        Report report = new XMLReport(employees);
+        Report report = new XMLReport(store);
         String expect = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
                 + "<employees>\n"
                 + "    <files>\n"
