@@ -1,6 +1,6 @@
 package ru.job4j.ood.lsp.parking;
 
-public class CarParkingSpace implements ParkingSpace {
+public class CarParkingSpace implements Parking {
     private Car car;
 
     public CarParkingSpace(Car car) {
@@ -8,7 +8,7 @@ public class CarParkingSpace implements ParkingSpace {
     }
 
     @Override
-    public void place(Car car) {
-
+    public boolean park(Car car) {
+        return false;
     }
 }
