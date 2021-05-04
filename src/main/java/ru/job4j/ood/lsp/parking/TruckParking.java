@@ -5,16 +5,19 @@ import java.util.List;
 
 public class TruckParking implements Parking {
     private List<Car> cars  = new ArrayList<>();
-    private Parking extraParking;
     private int size;
+    private int occupied;
 
-    public TruckParking(int size, Parking extraParking) {
+    public TruckParking(int size) {
         this.size = size;
-        this.extraParking = extraParking;
     }
 
     @Override
     public boolean park(Car car) {
+        if (size > occupied) {
+            occupied++;
+            return cars.add(car);
+        }
         return false;
     }
 }
