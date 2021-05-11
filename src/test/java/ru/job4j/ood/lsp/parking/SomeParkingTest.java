@@ -28,7 +28,7 @@ public class SomeParkingTest {
         SomeParking parking = new SomeParking(3, 1);
         parking.park(new PassengerCar());
         parking.park(new Truck(2));
-        parking.park(new Truck(2));
+        assertThat(parking.park(new Truck(2)), is(true));
     }
 
     @Test
@@ -36,7 +36,12 @@ public class SomeParkingTest {
         SomeParking parking = new SomeParking(2, 1);
         parking.park(new PassengerCar());
         parking.park(new Truck(2));
-        parking.park(new Truck(2));
+        assertThat(parking.park(new Truck(2)), is(false));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenTruckIncorrectSize() {
+        Car scania = new Truck(1);
     }
 
 }
