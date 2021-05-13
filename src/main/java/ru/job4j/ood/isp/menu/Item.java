@@ -1,46 +1,55 @@
 package ru.job4j.ood.isp.menu;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public abstract class Item implements OutputFormat {
-    private List<Item> children;
+public class Item implements ItemTree<Item>, Action {
     private Item parent;
+    private List<Item> children;
     private String name;
 
-    public Item(String name, List<Item> children, Item parent) {
-        this.children = children;
+    public Item(String name) {
         this.name = name;
-        this.parent = parent;
     }
 
-    abstract boolean function();
+    @Override
+    public Item getParent() {
+        return parent;
+    }
 
-    List<Item> getChildren() {
+    @Override
+    public List<Item> getParents() {
+        List<Item> parents = new ArrayList<>();
+        Item parent = this.getParent();
+        if (parent != null) {
+            parents.add(parent);
+            parents.addAll(parent.getParents());
+        }
+        return parents;
+    }
+
+    @Override
+    public void addChildren(List<Item> children) {
+        for (int i = 0; i < children.size(); i++) {
+            children.get(i).setParent(this);
+        }
+        this.children = children;
+    }
+
+    @Override
+    public List<Item> getChildren() {
+        if (children == null) {
+            return Collections.emptyList();
+        }
         return children;
     }
 
-    @Override
-    public String toString() {
-        return format();
+    private void setParent(Item parent) {
+        this.parent = parent;
     }
 
-    @Override
-    public String format() {
-        StringBuilder sb = new StringBuilder();
-        if (this.parent != null) {
-            sb.append("\n");
-            format();
-        }
-        sb.append(name);
-        if (!children.isEmpty()) {
-            sb.append(System.lineSeparator());
-            for (int i = 0; i < children.size(); i++) {
-                sb.append("\t")
-                        .append(children.get(i).format());
-            }
-        } else {
-            sb.append(System.lineSeparator());
-        }
-        return sb.toString();
+    public String toString() {
+        return name;
     }
 }
