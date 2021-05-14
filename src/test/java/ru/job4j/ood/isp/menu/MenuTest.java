@@ -61,7 +61,7 @@ public class MenuTest {
 
     @Test
     public void whenMenuItemAction() {
-        assertThat(menu.choice(new String[]{"0", "1", "0", "0"}), is(true));
+        assertThat(menu.choice("1.2.1.1"), is(true));
     }
 
 }
