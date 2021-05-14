@@ -7,21 +7,27 @@ public class Warehouse implements Storage {
     private List<Food> foods = new ArrayList<>();
 
     @Override
-    public void add(Food food) {
-        foods.add(food);
-    }
-
-    @Override
-    public String getFoods() {
-        return foods.toString();
-    }
-
-    @Override
-    public void validate(Food food) {
-        float days = getRemaining(food);
-            if (days > 0
-                    && (((days - food.getExpiryDate()) / food.getExpiryDate()) * 100) < 25) {
-                add(food);
+    public boolean add(Food food, float remainingDays) {
+        if (validate(food, remainingDays)) {
+            foods.add(food);
+            return true;
         }
+        return false;
+    }
+
+    @Override
+    public List<Food> getFoods() {
+        return foods;
+    }
+
+    @Override
+    public boolean validate(Food food, float remainingDays) {
+        float expirationPercent = (
+                ((food.getExpiryDate() - remainingDays) / food.getExpiryDate()) * 100
+        );
+        if (remainingDays > 0 && expirationPercent < 25) {
+            return true;
+        }
+        return false;
     }
 }

@@ -1,24 +1,42 @@
 package ru.job4j.ood.lsp.storage;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class ControllQuality {
+    private final static LocalDate DATE = LocalDate.now();
     private List<Food> foods;
-    private Storage storage;
+    private List<Storage> storages;
 
-    public ControllQuality(List<Food> foods, Storage storage) {
+    public ControllQuality(List<Food> foods, List<Storage> storages) {
         this.foods = foods;
-        this.storage = storage;
-        validate(foods);
+        this.storages = storages;
+        validateSort(foods);
     }
 
-    public Storage getStorage() {
-        return storage;
+    private float getRemaining(Food food) {
+        return food.getExpiryDate() - (DATE
+                .getDayOfYear() - food.getCreateDate()
+                .getDayOfYear());
     }
 
-    void validate(List<Food> foods) {
+    void validateSort(List<Food> foods) {
         for (Food food : foods) {
-            storage.validate(food);
+            float daysLeft = getRemaining(food);
+            for (Storage storage : storages) {
+                storage.add(food, daysLeft);
+            }
         }
+    }
+
+    public String report() {
+        StringBuilder sb = new StringBuilder();
+        for (Storage storage : storages) {
+            sb.append("Foods in " + storage.getClass().getSimpleName() + " : ")
+                    .append(System.lineSeparator())
+                    .append(storage.getFoods().toString())
+                    .append(System.lineSeparator());
+        }
+        return sb.toString();
     }
 }

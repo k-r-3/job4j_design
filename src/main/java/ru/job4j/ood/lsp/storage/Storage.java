@@ -1,19 +1,13 @@
 package ru.job4j.ood.lsp.storage;
 
-import java.time.LocalDate;
+import java.util.List;
 
 public interface Storage {
-    final static LocalDate DATE = LocalDate.of(2021, 4, 29);
 
-    void add(Food food);
+    boolean add(Food food, float remainingDays);
 
-    String getFoods();
+    List<Food> getFoods();
 
-    void validate(Food food);
+    boolean validate(Food foods, float remainingDays);
 
-    default float getRemaining(Food food) {
-        return food.getExpiryDate() - (DATE
-                .getDayOfYear() - food.getCreateDate()
-                .getDayOfYear());
-    }
 }
