@@ -3,6 +3,7 @@ package ru.job4j.ood.isp.menu;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
@@ -18,10 +19,51 @@ public class MenuTest {
 
     @Before
     public void init() {
-        task1.addChildren(List.of(task2, task3));
-        task3.addChildren(List.of(task4));
-        task4.addChildren(List.of(check));
-        menu = new Menu(List.of(task1));
+        task1.addChildren(Arrays.asList(task2, task3));
+        task2.addChildren(Arrays.asList(new Item("item")));
+        task3.addChildren(Arrays.asList(task4));
+        task4.addChildren(Arrays.asList(check));
+        menu = new Menu(Arrays.asList(task1));
+    }
+
+    @Test
+    public void whenGetItem() {
+        String expected = task1.getElement("1.2.1.1 check").get().getName();
+        assertThat(expected, is("1.2.1.1 check"));
+    }
+
+    @Test
+    public void whenAddChild() {
+        Item item = new Item("new Item");
+        check.addChild("1.2.1.1 check", item);
+        assertThat(check.getChildren().size(), is(1));
+    }
+
+    @Test
+    public void whenAddChildOnBranch() {
+        Item item = new Item("new Item");
+        task3.addChild("1.2.1.1 check", item);
+        assertThat(check.getChildren().size(), is(1));
+    }
+
+    @Test
+    public void whenAddChildWithoutBranch() {
+        Item item = new Item("new Item");
+        task2.addChild("1.2.1.1 check", item);
+        assertThat(check.getChildren().size(), is(1));
+    }
+
+    @Test
+    public void whenAddChildOnRoot() {
+        Item item = new Item("new Item");
+        task1.addChild("1.2.1.1 check", item);
+        assertThat(check.getChildren().size(), is(1));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenNotFound() {
+        Item item = new Item("new Item");
+        task1.addChild("1.2 check", item);
     }
 
     @Test
@@ -32,6 +74,12 @@ public class MenuTest {
         assertThat(task4.getChildren().size(), is(1));
         assertThat(check.getChildren().size(), is(0));
     }
+
+//    @Test
+//    public void whenDelChild() {
+//        task4.deleteChild("1.2.1.1 check");
+//        assertThat(task4.getChildren().size(), is(0));
+//    }
 
     @Test
     public void whenParents() {
