@@ -20,7 +20,6 @@ public class MenuTest {
     @Before
     public void init() {
         task1.addChildren(Arrays.asList(task2, task3));
-        task2.addChildren(Arrays.asList(new Item("item")));
         task3.addChildren(Arrays.asList(task4));
         task4.addChildren(Arrays.asList(check));
         menu = new Menu(Arrays.asList(task1));
@@ -75,11 +74,11 @@ public class MenuTest {
         assertThat(check.getChildren().size(), is(0));
     }
 
-//    @Test
-//    public void whenDelChild() {
-//        task4.deleteChild("1.2.1.1 check");
-//        assertThat(task4.getChildren().size(), is(0));
-//    }
+    @Test
+    public void whenDelChild() {
+        task4.deleteChild("1.2.1.1 check");
+        assertThat(task4.getChildren().size(), is(0));
+    }
 
     @Test
     public void whenParents() {

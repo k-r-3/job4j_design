@@ -1,13 +1,10 @@
 package ru.job4j.ood.isp.menu;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Item implements ItemTree<Item>, Action {
     private Item parent;
-    private List<Item> children = new ArrayList<>();
+    private ArrayList<Item> children = new ArrayList<>();
     private String name;
     private boolean visited = false;
 
@@ -18,33 +15,6 @@ public class Item implements ItemTree<Item>, Action {
     @Override
     public Item getParent() {
         return parent;
-    }
-
-    @Override
-    public Optional<Item> getElement(String name) {
-        Optional<Item> element = Optional.of(this);
-        if (element.get().getName().equals(name)) {
-            return element;
-        }
-        List<Item> branch = element.get().getChildren();
-        if (!branch.isEmpty()) {
-            for (Item item : branch) {
-                if (!visited) {
-                    visited = true;
-                    Optional<Item> child = item.getElement(name);
-                    if (child.isPresent()) {
-                        visited = false;
-                        return child;
-                    }
-                }
-                visited = false;
-            }
-        }
-        Optional<Item> parent = Optional.ofNullable(element.get().getParent());
-        if (parent.isPresent()) {
-            return parent.get().getElement(name);
-        }
-        return Optional.empty();
     }
 
     @Override
@@ -59,10 +29,52 @@ public class Item implements ItemTree<Item>, Action {
     }
 
     @Override
-    public void addChild(String parentName, Item child) {
-        Optional<Item> parent = getElement(parentName);
+    public Optional<Item> getElement(String name) {
+        Optional<Item> element = Optional.of(this);
+        if (element.get().getName().equals(name)) {
+            return element;
+        }
+        List<Item> branch = element.get().getChildren();
+        if (!branch.isEmpty()) {
+            for (Item item : branch) {
+                if (!item.visited) {
+                    item.visited = true;
+                    Optional<Item> child = item.getElement(name);
+                    if (child.isPresent()) {
+                        item.visited = false;
+                        return child;
+                    }
+                }
+            }
+        }
+        Optional<Item> parent = Optional.ofNullable(element.get().getParent());
         if (parent.isPresent()) {
-            parent.get().getChildren().add(child);
+            return parent.get().getElement(name);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public void addChild(String parentName, Item child) {
+        getParentBranch(parentName).add(child);
+    }
+
+    public boolean deleteChild(String itemName) {
+        Optional<Item> item = getElement(itemName);
+        List<Item> list = getParentBranch(item.get().getParent().getName());
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getName().equals(itemName)) {
+                list.remove(i);
+            }
+        }
+        return true;
+    }
+
+    private List<Item> getParentBranch(String parentName) {
+        Optional<Item> item = getElement(parentName);
+        if (item.isPresent()) {
+            return item.get()
+                    .getChildren();
         } else {
             throw new IllegalArgumentException("parent not found");
         }
@@ -73,7 +85,7 @@ public class Item implements ItemTree<Item>, Action {
         for (int i = 0; i < children.size(); i++) {
             children.get(i).setParent(this);
         }
-        this.children = children;
+        this.children = new ArrayList<>(children);
     }
 
     @Override
@@ -94,9 +106,5 @@ public class Item implements ItemTree<Item>, Action {
 
     public String toString() {
         return name;
-    }
-
-    public boolean deleteChild(String itemName) {
-        return false;
     }
 }
