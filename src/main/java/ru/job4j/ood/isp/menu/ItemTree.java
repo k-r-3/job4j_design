@@ -2,21 +2,20 @@ package ru.job4j.ood.isp.menu;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
 
 public interface ItemTree<E> {
 
-    E getParent();
-
     Optional<E> getElement(String name);
 
-    List<E> getParents();
+    List<E> getParents(E start);
 
     void addChild(String parentName, E child);
 
     boolean deleteChild(String name);
 
-    void addChildren(List<E> children);
+    void addChildren(List<E> children, String targetItem);
 
-    List<E> getChildren();
+    Optional<E> bfs(Queue<E> queue, String target);
 
 }
