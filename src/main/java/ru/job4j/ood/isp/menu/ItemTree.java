@@ -6,8 +6,6 @@ import java.util.Queue;
 
 public interface ItemTree<E> {
 
-    Optional<E> getElement(String name);
-
     List<E> getParents(E start);
 
     void addChild(String parentName, E child);

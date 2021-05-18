@@ -57,7 +57,7 @@ public class Menu implements ItemTree<Item>, Output<Item> {
     }
 
     public Optional<Item> getElement(String name) {
-        Queue<Item> queue = new ArrayDeque<>(getItems());
+        Queue<Item> queue = new LinkedList<>(getItems());
         Optional<Item> result = bfs(queue, name);
         if (result.isPresent()) {
             return result;
