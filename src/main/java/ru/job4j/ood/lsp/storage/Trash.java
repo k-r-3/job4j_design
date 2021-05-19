@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Trash implements Storage {
-    private List<Food> foods = new ArrayList<>();
+    private List<Food> foods;
+
+    public Trash(List<Food> foods) {
+        this.foods = foods;
+    }
 
     @Override
     public boolean add(Food food, float remainingDays) {

@@ -1,15 +1,13 @@
 package ru.job4j.ood.lsp.storage;
 
-import java.time.LocalDate;
-
-public class Food {
+public class Food<T> {
     private String name;
     private int expiryDate;
-    private LocalDate createDate;
+    private DateOfProduct<T> createDate;
     private double price;
     private int discount;
 
-    public Food(String name, int expiryDate, LocalDate createDate, double price, int discount) {
+    public Food(String name, int expiryDate, DateOfProduct<T> createDate, double price, int discount) {
         this.name = name;
         this.expiryDate = expiryDate;
         this.createDate = createDate;
@@ -22,7 +20,11 @@ public class Food {
         price -= (price / 100) * discount;
     }
 
-    public LocalDate getCreateDate() {
+    public int getDiscount() {
+        return discount;
+    }
+
+    public DateOfProduct<T> getCreateDate() {
         return createDate;
     }
 
